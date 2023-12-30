@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="Root" style="flex-grow: 1; width: 100%; height: 100%;">
+        <TwoPaneSplitViewHorizontalExposed name="WorkSpace" fixed-pane-initial-dimension="192" style="width: 100%; height: 100%; overflow: hidden;">
+            <ui:VisualElement name="Parameters" style="flex-grow: 1; flex-shrink: 1; min-width: 192px;">
+                <ui:IMGUIContainer name="ParametersIMGUI" style="flex-grow: 1; overflow: hidden;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="State" style="flex-shrink: 1; min-width: 256px;">
+                <ui:IMGUIContainer name="StateLayerIMGUI" style="height: 20px; flex-grow: 0; border-bottom-width: 1px; border-bottom-color: rgb(84, 84, 84);" />
+                <ui:IMGUIContainer name="StateGraphIMGUI" style="flex-grow: 1; overflow: hidden;" />
+            </ui:VisualElement>
+        </TwoPaneSplitViewHorizontalExposed>
+        <ui:VisualElement name="Notice" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); overflow: visible; visibility: visible; display: none;">
+            <ui:Label text="Please select a state machine &#10;executor controller to check or editor" display-tooltip-when-elided="true" name="NoticeLabel" style="align-items: stretch; justify-content: space-between; flex-shrink: 1; flex-grow: 1; -unity-text-align: middle-center; -unity-font-style: bold; font-size: 30px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

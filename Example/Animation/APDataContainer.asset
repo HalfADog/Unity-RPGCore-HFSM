@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f645c77132aa952469c026ec51741d6e, type: 3}
+  m_Name: APDataContainer
+  m_EditorClassIdentifier: 
+  defaultAnimation: {fileID: 11400000, guid: 10d23429b2ef28f44a554b06e227a790, type: 2}
+  defaultMask: {fileID: 31900000, guid: 4e93fcd7edb1b1a49899e576f1b92921, type: 2}
+  datas:
+  - {fileID: 11400000, guid: dbb868bc21745604fb13d3a677e4c445, type: 2}
+  - {fileID: 11400000, guid: 06b28a00197edab49946176a3116c3ec, type: 2}
+  - {fileID: 11400000, guid: 0efe6904d6e8f8740b1d3342fce0a30d, type: 2}
+  - {fileID: 11400000, guid: 296fe69a7f100d5419deffbfd3d4b81e, type: 2}
+  - {fileID: 11400000, guid: 10d23429b2ef28f44a554b06e227a790, type: 2}
+  - {fileID: 11400000, guid: 172d8108812af5f4886430cc1151442c, type: 2}
+  - {fileID: 11400000, guid: e4ac1866f39a08a48abfcb571c5dd6c4, type: 2}
+  layerMasks: []

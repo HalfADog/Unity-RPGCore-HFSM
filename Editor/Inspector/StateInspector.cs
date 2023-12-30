@@ -1,0 +1,101 @@
+using DogFramework;
+using UnityEditor;
+using UnityEngine;
+
+namespace RPGCore.AI.HFSM
+{
+	[CustomEditor(typeof(StateInspectorHelper))]
+	public class StateInspector : Editor
+	{
+		public string stateName;
+
+		public override void OnInspectorGUI()
+		{
+			StateInspectorHelper helper = target as StateInspectorHelper;
+			if (helper == null) return;
+			bool disable = EditorApplication.isPlaying || helper.stateData.id == StateMachine.entryState || helper.stateData.id == StateMachine.anyState;
+			EditorGUI.BeginDisabledGroup(disable);
+			EditorGUILayout.BeginVertical();
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField("state name", GUILayout.Width(80));
+			string newName = helper.stateData.id;
+			newName = EditorGUILayout.DelayedTextField(newName);
+			helper.HFSMController.RenameState(helper.stateData, newName);
+			if (newName != stateName)
+			{
+				stateName = newName;
+				EditorUtility.SetDirty(helper.HFSMController);
+			}
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.Space();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField("description", GUILayout.Width(80));
+			string description = helper.stateData.description;
+			description = GUILayout.TextField(description);
+			helper.stateData.description = description;
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.Space();
+			disable = helper.HFSMController.transitions.Find(t => t.to == helper.stateData.id)?.from != StateMachine.anyState;
+			EditorGUI.BeginDisabledGroup(disable);
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField("is temporary", GUILayout.Width(80));
+			helper.stateData.isTemporary = GUILayout.Toggle(helper.stateData.isTemporary, "");
+			EditorGUILayout.EndHorizontal();
+			EditorGUI.EndDisabledGroup();
+
+			EditorGUILayout.Space();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField("handle exit", GUILayout.Width(80));
+			EditorGUILayout.BeginVertical();
+			helper.stateData.canExitHandle = GUILayout.Toggle(helper.stateData.canExitHandle, "");
+			EditorGUI.BeginDisabledGroup(!helper.stateData.canExitHandle);
+			helper.stateData.canExitDescription = GUILayout.TextField(helper.stateData.canExitDescription);
+			EditorGUI.EndDisabledGroup();
+			EditorGUILayout.EndVertical();
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.EndVertical();
+			EditorGUI.EndDisabledGroup();
+		}
+
+		protected override void OnHeaderGUI()
+		{
+			StateInspectorHelper helper = target as StateInspectorHelper;
+			if (helper == null) return;
+			EditorGUILayout.Space();
+			EditorGUILayout.BeginHorizontal();
+
+			GUILayout.Label(EditorGUIUtility.IconContent("icons/processed/unityeditor/animations/animatorstate icon.asset"), GUILayout.Width(30), GUILayout.Height(30));
+			EditorGUILayout.LabelField("Name", GUILayout.Width(80));
+
+			EditorGUILayout.LabelField(stateName);
+
+			EditorGUILayout.EndHorizontal();
+
+			var rect = EditorGUILayout.BeginHorizontal();
+
+			EditorGUILayout.Space();
+			Handles.color = Color.black;
+			Handles.DrawLine(new Vector2(rect.x, rect.y), new Vector2(rect.x + rect.width, rect.y));
+			EditorGUILayout.Space();
+
+			EditorGUILayout.EndHorizontal();
+		}
+	}
+
+	public class StateInspectorHelper : ScriptableObjectSingleton<StateInspectorHelper>
+	{
+		public StateMachineExecutorController HFSMController;
+		public StateData stateData;
+
+		public void Inspector(StateMachineExecutorController HFSMController, StateData stateData)
+		{
+			this.HFSMController = HFSMController;
+			this.stateData = stateData;
+			Selection.activeObject = this;
+		}
+	}
+}
