@@ -1,8 +1,5 @@
-using AE_FSM;
 using DogFramework.EditorExtension;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -109,7 +106,7 @@ namespace RPGCore.AI.HFSM
 				EditorGUI.LabelField(left_container, parameterData.name);
 			}
 
-			if (isRenaming && EventUtility.IsMouseDown(0))
+			if (isRenaming && EventExtension.IsMouseDown(0))
 			{
 				isRenaming = false;
 			}

@@ -1,7 +1,4 @@
-using AE_FSM;
 using DogFramework.EditorExtension;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -51,13 +48,13 @@ namespace RPGCore.AI.HFSM
 				Event.current.Use();
 			}
 			//取消选中
-			if (posotion.MouseOn() && !IsMouseOverAnyState(context.currentChildStatesData) && EventUtility.IsMouseDown(0))
+			if (posotion.MouseOn() && !IsMouseOverAnyState(context.currentChildStatesData) && EventExtension.IsMouseDown(0))
 			{
 				this.context.ClearAllSelectNode();
 				this.context.StopPriviewTransition();
 			}
 			//右键菜单
-			if (posotion.IsContainsCurrentMouse() && !IsMouseOverAnyState(context.currentChildStatesData) && EventUtility.IsMouseUp(1) && this.context.HFSMController != null)
+			if (posotion.MouseOn() && !IsMouseOverAnyState(context.currentChildStatesData) && EventExtension.IsMouseUp(1) && this.context.HFSMController != null)
 			{
 				mousePosition = Event.current.mousePosition;
 				CreateMenu();

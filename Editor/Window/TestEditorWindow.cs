@@ -1,9 +1,7 @@
+using DogFramework.EditorExtension;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using DogFramework.EditorExtension;
-using System.Linq;
-using Unity.VisualScripting;
 
 public class TestEditorWindow : EditorWindow
 {

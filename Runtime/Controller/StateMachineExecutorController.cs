@@ -7,7 +7,6 @@ using System.Text;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 namespace RPGCore.AI.HFSM
 {
