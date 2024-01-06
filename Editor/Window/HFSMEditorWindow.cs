@@ -31,19 +31,33 @@ namespace RPGCore.AI.HFSM
 
 		public void CreateGUI()
 		{
-			var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Unity-RPGCore-HFSM/Editor/Resources/HFSMEditorWindow.uxml");
-			rootVisualElement.Add(visualTree.Instantiate());
-
-			Root = rootVisualElement.Q<VisualElement>("Root");
-			Root.style.width = position.width;
-			Root.style.height = position.height;
-			stateGraphContaner = Root.Q<IMGUIContainer>("StateGraphIMGUI");
-			parametersContaner = Root.Q<IMGUIContainer>("ParametersIMGUI");
-			stateMachinePathContaner = Root.Q<IMGUIContainer>("StateLayerIMGUI");
-			noticeBoard = Root.Q<VisualElement>("Notice");
-			stateMachinePathContaner.onGUIHandler += StateMachinePathOnGUI;
-			parametersContaner.onGUIHandler += ParametersOnGUI;
-			stateGraphContaner.onGUIHandler += StateGraphOnGUI;
+			VisualTreeAsset visualTree = null;
+			foreach (var guid in AssetDatabase.FindAssets("t:VisualTreeAsset"))
+			{
+				string path = AssetDatabase.GUIDToAssetPath(guid);
+				if (path.Contains("HFSMEditorWindow.uxml"))
+				{
+					visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(path);
+				}
+			}
+			if (visualTree != null)
+			{
+				rootVisualElement.Add(visualTree.Instantiate());
+				Root = rootVisualElement.Q<VisualElement>("Root");
+				Root.style.width = position.width;
+				Root.style.height = position.height;
+				stateGraphContaner = Root.Q<IMGUIContainer>("StateGraphIMGUI");
+				parametersContaner = Root.Q<IMGUIContainer>("ParametersIMGUI");
+				stateMachinePathContaner = Root.Q<IMGUIContainer>("StateLayerIMGUI");
+				noticeBoard = Root.Q<VisualElement>("Notice");
+				stateMachinePathContaner.onGUIHandler += StateMachinePathOnGUI;
+				parametersContaner.onGUIHandler += ParametersOnGUI;
+				stateGraphContaner.onGUIHandler += StateGraphOnGUI;
+			}
+			else
+			{
+				Debug.LogWarning("Can't find HFSMEditorWindow.uxml asset file,Check is it exist.");
+			}
 		}
 
 		private void OnGUI()
