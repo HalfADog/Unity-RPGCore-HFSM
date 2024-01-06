@@ -18,6 +18,7 @@ namespace RPGCore.AI.HFSM
 		private Rect runStateProcessRect;
 		private GUIStyle runStateProcessBkStyle = new GUIStyle("MeLivePlayBackground");
 		private GUIStyle runStateProcessStyle = new GUIStyle("MeLivePlayBar");
+		private float clickedTime = -1f;
 
 		public GraphStateLayer(EditorWindow hFSMEditorWindow) : base(hFSMEditorWindow)
 		{
@@ -219,7 +220,14 @@ namespace RPGCore.AI.HFSM
 					{
 						if (EventExtension.IsMouseDown(0) && data.stateType == StateType.StateMachine)
 						{
-							this.context.nextStateMachine = (data as StateMachineData);
+							float clickedInterval = Time.time - clickedTime;
+							if (clickedInterval <= 0.3f)
+							{
+								this.context.nextStateMachine = (data as StateMachineData);
+								clickedTime = -1f;
+							}
+							else
+								clickedTime = Time.time;
 						}
 						Event.current.Use();
 						return;
