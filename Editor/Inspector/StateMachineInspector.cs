@@ -37,10 +37,11 @@ namespace RPGCore.AI.HFSM
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField("state name", GUILayout.Width(80));
 			string newName = helper.stateMachineData.id;
+			EditorGUI.BeginChangeCheck();
 			newName = EditorGUILayout.DelayedTextField(newName);
-			helper.HFSMController.RenameState(helper.stateMachineData, newName);
-			if (newName != stateName)
+			if (EditorGUI.EndChangeCheck() && newName != stateName)
 			{
+				helper.HFSMController.RenameState(helper.stateMachineData, newName);
 				stateName = newName;
 				EditorUtility.SetDirty(helper.HFSMController);
 			}
@@ -54,8 +55,12 @@ namespace RPGCore.AI.HFSM
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField("description", GUILayout.Width(80));
 			string description = helper.stateMachineData.description;
-			description = GUILayout.TextArea(description, GUILayout.Height(80));
-			helper.stateMachineData.description = description;
+			EditorGUI.BeginChangeCheck();
+			description = EditorGUILayout.DelayedTextField(description);
+			if (EditorGUI.EndChangeCheck())
+			{
+				helper.stateMachineData.description = description;
+			}
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.EndVertical();
 			EditorGUI.EndDisabledGroup();

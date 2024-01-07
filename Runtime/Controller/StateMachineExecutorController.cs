@@ -16,7 +16,7 @@ namespace RPGCore.AI.HFSM
 	[CreateAssetMenu(fileName = "FSM Executor Controller", menuName = "State Machine/Executor Controller", order = 4)]
 	public class StateMachineExecutorController : ScriptableObject
 	{
-		//controller对应的脚本名称
+		[HideInInspector]
 		public string realScriptControllerName;
 
 		//controller中的parameter
@@ -26,7 +26,15 @@ namespace RPGCore.AI.HFSM
 		public List<StateData> states = new List<StateData>();
 
 		//controller中的StateMachine
-		public List<StateMachineData> stateMachines = new List<StateMachineData>();
+		public List<StateMachineData> stateMachines = new List<StateMachineData>()
+		{
+			new StateMachineData()
+			{
+				id = "Root",
+				isRoot = true,
+				stateType = StateType.StateMachine,
+			}
+		};
 
 		//controller中的Transition
 		public List<TransitionData> transitions = new List<TransitionData>();
@@ -48,26 +56,7 @@ namespace RPGCore.AI.HFSM
 
 		private void Awake()
 		{
-			if (stateMachines.Find(sm => sm.id == "Root") == null)
-			{
-				StateMachineData root = new StateMachineData()
-				{
-					id = "Root",
-					isRoot = true,
-					stateType = StateType.StateMachine,
-				};
-				stateMachines.Add(root);
-			}
 		}
-
-		//private void OnEnable()
-		//{
-		//	scriptableObjectAssetPath = AssetDatabase.GetAssetPath(this);
-		//	if (scriptableObjectAssetPath != "")
-		//	{
-		//		scriptableObjectAssetPath = scriptableObjectAssetPath.Remove(scriptableObjectAssetPath.LastIndexOf("/") + 1);
-		//	}
-		//}
 
 		/// <summary>
 		/// 根据此获取运行时Controller
@@ -469,7 +458,7 @@ namespace RPGCore.AI.HFSM
 		/// </summary>
 		public void CreateState(Rect rect, StateMachineData currentStateMachine)
 		{
-			int count = states.Count(s => s.id.Contains("NewState"));
+			int count = states.Count(s => s.id.Contains("New State"));
 			StateData state = new StateData()
 			{
 				id = "New State " + count,
@@ -552,6 +541,7 @@ namespace RPGCore.AI.HFSM
 				parameterCondition.compareValue = 0.0f;
 			}
 			transition.parameterConditionDatas.Add(parameterCondition);
+			Save();
 		}
 
 		/// <summary>
@@ -564,6 +554,7 @@ namespace RPGCore.AI.HFSM
 			int count = stateMachine.services.Count(s => s.id.Contains("NewService"));
 			service.id = "NewService" + count;
 			stateMachine.services.Add(service);
+			Save();
 		}
 
 		/// <summary>
@@ -640,6 +631,7 @@ namespace RPGCore.AI.HFSM
 		public void DeleteParameterCondition(TransitionData transition, int index)
 		{
 			transition.parameterConditionDatas.RemoveAt(index);
+			Save();
 		}
 
 		/// <summary>
@@ -648,6 +640,7 @@ namespace RPGCore.AI.HFSM
 		public void DeleteService(StateMachineData stateMachine, ServiceData service)
 		{
 			stateMachine.services.Remove(service);
+			Save();
 		}
 
 		/// <summary>
@@ -702,6 +695,7 @@ namespace RPGCore.AI.HFSM
 				}
 			}
 			state.id = newName;
+			Save();
 		}
 
 #endif
