@@ -262,8 +262,8 @@ MonoBehaviour:
     entry:
       position:
         serializedVersion: 2
-        x: -239.99992
-        y: 593.333
+        x: -336.66663
+        y: 550
         width: 480
         height: 90
       isExecuting: 0
@@ -276,8 +276,8 @@ MonoBehaviour:
       canExitDescription: 
   - position:
       serializedVersion: 2
-      x: 693.7341
-      y: 454.33368
+      x: 523.7342
+      y: 434.33362
       width: 480
       height: 90
     isExecuting: 0
@@ -332,8 +332,8 @@ MonoBehaviour:
       canExitDescription: 
   - position:
       serializedVersion: 2
-      x: 693.7337
-      y: 864.3319
+      x: 1013.73364
+      y: 847.66534
       width: 480
       height: 90
     isExecuting: 0
@@ -480,8 +480,8 @@ MonoBehaviour:
     any:
       position:
         serializedVersion: 2
-        x: -123.33335
-        y: 49.99995
+        x: -390
+        y: 59.999947
         width: 480
         height: 90
       isExecuting: 0
