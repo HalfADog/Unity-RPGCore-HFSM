@@ -104,7 +104,7 @@ namespace RPGCore.Animation
 		[Range(0.1f, 2f)]
 		public float transitionTime = 0.1f;
 
-		private void Start()
+		public void Awake()
 		{
 			InitializePlayableGraph();
 		}

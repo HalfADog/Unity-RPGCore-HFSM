@@ -198,6 +198,8 @@ namespace RPGCore.AI.HFSM
 				//Debug.Log("toState : " + toState.id);
 				//再将转换后的状态入栈
 				FillExecuteStateStack(toState);
+				//重置当前执行成功的Transition中的所使用的Trigger
+				passedTransition.ResetTriggers();
 			}
 		}
 

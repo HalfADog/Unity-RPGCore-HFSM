@@ -29,6 +29,11 @@ namespace RPGCore.AI.HFSM
 		public abstract StateMachine ConstructStateMachine();
 
 		/// <summary>
+		/// 获取到当前正在执行的状态
+		/// </summary>
+		public string executeState => executor.executeStateStack.Peek().state.id;
+
+		/// <summary>
 		/// 当运行时状态机被构造时（On Game Awake）调用
 		/// </summary>
 		public virtual void Init()
@@ -78,7 +83,7 @@ namespace RPGCore.AI.HFSM
 
 		public void SetTrigger(string id)
 		{
-			Parameter data = parameters.Find(param => param.type == ParameterType.Bool && param.name == id);
+			Parameter data = parameters.Find(param => param.type == ParameterType.Trigger && param.name == id);
 			if (data != null)
 			{
 				data.baseValue = 1.0f;
@@ -96,5 +101,41 @@ namespace RPGCore.AI.HFSM
 
 		public bool GetTrigger(string id) =>
 			 (parameters.Find(param => param.type == ParameterType.Trigger && param.name == id)?.baseValue ?? 0.0f) >= 1.0f;
+
+		public void PauseService(string serviceName)
+		{
+			foreach (var stateBundle in executor.currentExecuteState.executeStackSnapshot)
+			{
+				if (stateBundle.services != null)
+				{
+					foreach (var service in stateBundle.services)
+					{
+						if (service.id == serviceName)
+						{
+							service.Pause();
+							return;
+						}
+					}
+				}
+			}
+		}
+
+		public void ContinueService(string serviceName)
+		{
+			foreach (var stateBundle in executor.currentExecuteState.executeStackSnapshot)
+			{
+				if (stateBundle.services != null)
+				{
+					foreach (var service in stateBundle.services)
+					{
+						if (service.id == serviceName)
+						{
+							service.Continue();
+							return;
+						}
+					}
+				}
+			}
+		}
 	}
 }

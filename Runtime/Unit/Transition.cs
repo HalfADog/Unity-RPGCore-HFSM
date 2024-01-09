@@ -77,10 +77,6 @@ namespace RPGCore.AI.HFSM
 						parameterConditions = false;
 						break;
 					}
-					if (pCondition.parameter.type == ParameterType.Trigger)
-					{
-						pCondition.parameter.baseValue = 0.0f;
-					}
 				}
 			}
 			if (from != null && from.stateType == StateType.State)
@@ -105,6 +101,23 @@ namespace RPGCore.AI.HFSM
 				}
 			}
 			return parentStateMachine.AddTransition(to, from);
+		}
+
+		/// <summary>
+		/// 重置所有的Trigger；此方法应在状态机在一帧中全部执行完之后执行
+		/// </summary>
+		public void ResetTriggers()
+		{
+			if (m_parameterConditions != null)
+			{
+				foreach (var pCondition in m_parameterConditions)
+				{
+					if (pCondition.parameter.type == ParameterType.Trigger)
+					{
+						pCondition.parameter.baseValue = 0.0f;
+					}
+				}
+			}
 		}
 	}
 

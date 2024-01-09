@@ -1,0 +1,720 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36b0e81b71c3614186d837935272b3b, type: 3}
+  m_Name: PlayerMovementController
+  m_EditorClassIdentifier: 
+  realScriptControllerName: PlayerMovementController
+  parameters:
+  - m_name: IsOnBattle
+    m_type: 2
+    baseValue: 0
+  - m_name: IsIdle
+    m_type: 2
+    baseValue: 0
+  - m_name: IsWalk
+    m_type: 2
+    baseValue: 0
+  - m_name: IsRun
+    m_type: 2
+    baseValue: 0
+  - m_name: IsLookToTarget
+    m_type: 2
+    baseValue: 0
+  - m_name: Attack
+    m_type: 3
+    baseValue: 0
+  - m_name: GetHit
+    m_type: 3
+    baseValue: 0
+  - m_name: Dead
+    m_type: 3
+    baseValue: 0
+  - m_name: Talk
+    m_type: 3
+    baseValue: 0
+  - m_name: RollOrDodge
+    m_type: 3
+    baseValue: 0
+  states:
+  - position:
+      serializedVersion: 2
+      x: 683.73346
+      y: -45.66667
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: get_hit
+    stateType: 0
+    isDefault: 0
+    description: 
+    isTemporary: 1
+    canExitHandle: 1
+    canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 617.0663
+      y: 287.66635
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: normal_idle
+    stateType: 0
+    isDefault: 1
+    description: 
+    isTemporary: 0
+    canExitHandle: 0
+    canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 1347.0675
+      y: 284.3316
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: normal_walk
+    stateType: 0
+    isDefault: 0
+    description: 
+    isTemporary: 0
+    canExitHandle: 0
+    canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 710.3991
+      y: 297.66678
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: free_view_idle
+    stateType: 0
+    isDefault: 1
+    description: 
+    isTemporary: 0
+    canExitHandle: 0
+    canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 20.399654
+      y: 754.3322
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: free_view_run
+    stateType: 0
+    isDefault: 0
+    description: 
+    isTemporary: 0
+    canExitHandle: 0
+    canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 1473.7334
+      y: 744.3329
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: roll
+    stateType: 0
+    isDefault: 0
+    description: 
+    isTemporary: 0
+    canExitHandle: 1
+    canExitDescription: "\u5F53Roll\u7684\u52A8\u753B\u64AD\u653E\u5B8C\u6210\u65F6\u81EA\u52A8\u56DE\u5230Idle\u72B6\u6001"
+  - position:
+      serializedVersion: 2
+      x: 987.066
+      y: 261.00003
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: look_to_target_idle
+    stateType: 0
+    isDefault: 1
+    description: 
+    isTemporary: 0
+    canExitHandle: 0
+    canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 510.4003
+      y: 707.6664
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: look_to_target_walk
+    stateType: 0
+    isDefault: 0
+    description: 
+    isTemporary: 0
+    canExitHandle: 0
+    canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 1493.7352
+      y: 697.66614
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: dodge
+    stateType: 0
+    isDefault: 0
+    description: 
+    isTemporary: 0
+    canExitHandle: 1
+    canExitDescription: "\u5F53Dodge\u7684\u52A8\u753B\u64AD\u653E\u5B8C\u6210\u65F6\u81EA\u52A8\u56DE\u5230Idle\u72B6\u6001"
+  - position:
+      serializedVersion: 2
+      x: 631.9996
+      y: -282.3332
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: attack
+    stateType: 0
+    isDefault: 0
+    description: 
+    isTemporary: 1
+    canExitHandle: 1
+    canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 781.5995
+      y: -149.00003
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: normal_talk
+    stateType: 0
+    isDefault: 0
+    description: 
+    isTemporary: 1
+    canExitHandle: 1
+    canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 715.46674
+      y: 1114.8666
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: free_view_sprint
+    stateType: 0
+    isDefault: 0
+    description: 
+    isTemporary: 0
+    canExitHandle: 0
+    canExitDescription: 
+  stateMachines:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    isExecuting: 0
+    id: Root
+    stateType: 1
+    isDefault: 0
+    description: 
+    isRoot: 1
+    childStates:
+    - normal
+    - battle
+    - get_hit
+    defaultState: normal
+    transitions:
+    - c46e7e9710a5a6a41a8935f2ee2a5cac
+    - c2e120f1b7485664682230f92d5902ab
+    - c168693a364d1b54eab1f49ced6296ae
+    services:
+    - id: ProcessInput
+      serviceType: 0
+      customInterval: 0
+      description: 
+    - id: CheckGetHit
+      serviceType: 1
+      customInterval: 0
+      description: 
+    any:
+      position:
+        serializedVersion: 2
+        x: -239.9999
+        y: -3.3333108
+        width: 480
+        height: 90
+      isExecuting: 0
+      id: Any
+      stateType: 0
+      isDefault: 0
+      description: 
+      isTemporary: 0
+      canExitHandle: 0
+      canExitDescription: 
+    entry:
+      position:
+        serializedVersion: 2
+        x: -239.99992
+        y: 593.333
+        width: 480
+        height: 90
+      isExecuting: 0
+      id: Entry
+      stateType: 0
+      isDefault: 0
+      description: 
+      isTemporary: 0
+      canExitHandle: 0
+      canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 693.7341
+      y: 454.33368
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: normal
+    stateType: 1
+    isDefault: 1
+    description: 
+    isRoot: 0
+    childStates:
+    - normal_idle
+    - normal_walk
+    - normal_talk
+    defaultState: normal_idle
+    transitions:
+    - 4c358aca5b797e045ad8168931ab87a9
+    - 13bc0e1d082481a4a9e5b1d6fa77cdd0
+    - 0244fa326604f7c44ac323839d847120
+    services:
+    - id: ProcessTalk
+      serviceType: 0
+      customInterval: 0
+      description: 
+    any:
+      position:
+        serializedVersion: 2
+        x: -176.66666
+        y: -233.33327
+        width: 480
+        height: 90
+      isExecuting: 0
+      id: Any
+      stateType: 0
+      isDefault: 0
+      description: 
+      isTemporary: 0
+      canExitHandle: 0
+      canExitDescription: 
+    entry:
+      position:
+        serializedVersion: 2
+        x: -176.66664
+        y: 293.33313
+        width: 480
+        height: 90
+      isExecuting: 0
+      id: Entry
+      stateType: 0
+      isDefault: 0
+      description: 
+      isTemporary: 0
+      canExitHandle: 0
+      canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 693.7337
+      y: 864.3319
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: battle
+    stateType: 1
+    isDefault: 0
+    description: 
+    isRoot: 0
+    childStates:
+    - battle_look_to_target
+    - battle_free_view
+    - attack
+    defaultState: battle_free_view
+    transitions:
+    - b81129355141b3544a0ab054a3986fdf
+    - c0418f728f6f52447bbe491462b08500
+    - ff2ed0e2d4cc0a04fa881ee5d10d0817
+    services:
+    - id: ProcessRollOrDodge
+      serviceType: 0
+      customInterval: 0
+      description: 
+    - id: ProcessAttack
+      serviceType: 0
+      customInterval: 0
+      description: 
+    any:
+      position:
+        serializedVersion: 2
+        x: -350.00012
+        y: -266.6666
+        width: 480
+        height: 90
+      isExecuting: 0
+      id: Any
+      stateType: 0
+      isDefault: 0
+      description: 
+      isTemporary: 0
+      canExitHandle: 0
+      canExitDescription: 
+    entry:
+      position:
+        serializedVersion: 2
+        x: -413.33334
+        y: 286.66644
+        width: 480
+        height: 90
+      isExecuting: 0
+      id: Entry
+      stateType: 0
+      isDefault: 0
+      description: 
+      isTemporary: 0
+      canExitHandle: 0
+      canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 617.06647
+      y: 621.0005
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: battle_look_to_target
+    stateType: 1
+    isDefault: 0
+    description: 
+    isRoot: 0
+    childStates:
+    - look_to_target_idle
+    - look_to_target_walk
+    - dodge
+    defaultState: look_to_target_idle
+    transitions:
+    - b34434a0240ed5f42a4c0b16c2d9563d
+    - 68c155fcadfbbde438fe93a17b859563
+    - 702c039924b880c41b8f74f822c2f878
+    - fe51405a88ce0d246a60d1397ff50f3f
+    services:
+    - id: FaceToTarget
+      serviceType: 0
+      customInterval: 0
+      description: 
+    any:
+      position:
+        serializedVersion: 2
+        x: 43.333317
+        y: 66.66665
+        width: 480
+        height: 90
+      isExecuting: 0
+      id: Any
+      stateType: 0
+      isDefault: 0
+      description: 
+      isTemporary: 0
+      canExitHandle: 0
+      canExitDescription: 
+    entry:
+      position:
+        serializedVersion: 2
+        x: -3.333348
+        y: 446.66675
+        width: 480
+        height: 90
+      isExecuting: 0
+      id: Entry
+      stateType: 0
+      isDefault: 0
+      description: 
+      isTemporary: 0
+      canExitHandle: 0
+      canExitDescription: 
+  - position:
+      serializedVersion: 2
+      x: 617.06616
+      y: 174.33354
+      width: 480
+      height: 90
+    isExecuting: 0
+    id: battle_free_view
+    stateType: 1
+    isDefault: 1
+    description: 
+    isRoot: 0
+    childStates:
+    - free_view_idle
+    - free_view_run
+    - roll
+    - free_view_sprint
+    defaultState: free_view_idle
+    transitions:
+    - 90c5c964d45e0bb4692315096d6480a3
+    - aea99909ee5747541a3f96fc4ebea941
+    - ba129fa4353296a4eb141a1db0b8ac8a
+    - 78e369192632d37459a5f2a6dd1af335
+    - 78c21d9c4826f9449b8ba6f668cdea07
+    - ed13ced2e0855cb48bfb3b99cc8dd4f0
+    - db571e8e427b3884f9e2eb05f52ccffd
+    - 478d26504e2b59347ba7d182a62be3ff
+    - 84ecc4cba50512444b41e489fc0b66f2
+    - 20baea471c34ae84e9420fb9391c6b65
+    services: []
+    any:
+      position:
+        serializedVersion: 2
+        x: -123.33335
+        y: 49.99995
+        width: 480
+        height: 90
+      isExecuting: 0
+      id: Any
+      stateType: 0
+      isDefault: 0
+      description: 
+      isTemporary: 0
+      canExitHandle: 0
+      canExitDescription: 
+    entry:
+      position:
+        serializedVersion: 2
+        x: -150.00002
+        y: 433.33337
+        width: 480
+        height: 90
+      isExecuting: 0
+      id: Entry
+      stateType: 0
+      isDefault: 0
+      description: 
+      isTemporary: 0
+      canExitHandle: 0
+      canExitDescription: 
+  transitions:
+  - id: c46e7e9710a5a6a41a8935f2ee2a5cac
+    from: normal
+    to: battle
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsOnBattle
+      compareType: 2
+      compareValue: 1
+  - id: c2e120f1b7485664682230f92d5902ab
+    from: Any
+    to: get_hit
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: GetHit
+      compareType: 2
+      compareValue: 0
+  - id: 4c358aca5b797e045ad8168931ab87a9
+    from: normal_idle
+    to: normal_walk
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsWalk
+      compareType: 2
+      compareValue: 1
+  - id: 13bc0e1d082481a4a9e5b1d6fa77cdd0
+    from: normal_walk
+    to: normal_idle
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsIdle
+      compareType: 2
+      compareValue: 1
+  - id: b81129355141b3544a0ab054a3986fdf
+    from: battle_look_to_target
+    to: battle_free_view
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsLookToTarget
+      compareType: 2
+      compareValue: 0
+  - id: c0418f728f6f52447bbe491462b08500
+    from: battle_free_view
+    to: battle_look_to_target
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsLookToTarget
+      compareType: 2
+      compareValue: 1
+  - id: 90c5c964d45e0bb4692315096d6480a3
+    from: free_view_idle
+    to: free_view_run
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsWalk
+      compareType: 2
+      compareValue: 1
+  - id: aea99909ee5747541a3f96fc4ebea941
+    from: free_view_idle
+    to: roll
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: RollOrDodge
+      compareType: 2
+      compareValue: 0
+  - id: ba129fa4353296a4eb141a1db0b8ac8a
+    from: free_view_run
+    to: roll
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: RollOrDodge
+      compareType: 2
+      compareValue: 0
+  - id: 78e369192632d37459a5f2a6dd1af335
+    from: roll
+    to: free_view_idle
+    baseConditionsName: []
+    parameterConditionDatas: []
+  - id: 78c21d9c4826f9449b8ba6f668cdea07
+    from: free_view_run
+    to: free_view_idle
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsIdle
+      compareType: 2
+      compareValue: 1
+  - id: b34434a0240ed5f42a4c0b16c2d9563d
+    from: dodge
+    to: look_to_target_idle
+    baseConditionsName: []
+    parameterConditionDatas: []
+  - id: 68c155fcadfbbde438fe93a17b859563
+    from: look_to_target_idle
+    to: look_to_target_walk
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsWalk
+      compareType: 2
+      compareValue: 1
+  - id: 702c039924b880c41b8f74f822c2f878
+    from: look_to_target_walk
+    to: look_to_target_idle
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsIdle
+      compareType: 2
+      compareValue: 1
+  - id: fe51405a88ce0d246a60d1397ff50f3f
+    from: look_to_target_walk
+    to: dodge
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: RollOrDodge
+      compareType: 2
+      compareValue: 0
+  - id: ff2ed0e2d4cc0a04fa881ee5d10d0817
+    from: Any
+    to: attack
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: Attack
+      compareType: 2
+      compareValue: 0
+  - id: c168693a364d1b54eab1f49ced6296ae
+    from: battle
+    to: normal
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsOnBattle
+      compareType: 2
+      compareValue: 0
+  - id: 0244fa326604f7c44ac323839d847120
+    from: Any
+    to: normal_talk
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: Talk
+      compareType: 2
+      compareValue: 0
+  - id: ed13ced2e0855cb48bfb3b99cc8dd4f0
+    from: free_view_run
+    to: free_view_sprint
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsRun
+      compareType: 2
+      compareValue: 1
+  - id: db571e8e427b3884f9e2eb05f52ccffd
+    from: free_view_sprint
+    to: roll
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: RollOrDodge
+      compareType: 2
+      compareValue: 0
+  - id: 478d26504e2b59347ba7d182a62be3ff
+    from: free_view_sprint
+    to: free_view_run
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsWalk
+      compareType: 2
+      compareValue: 1
+    - parameterName: IsRun
+      compareType: 2
+      compareValue: 0
+  - id: 84ecc4cba50512444b41e489fc0b66f2
+    from: free_view_sprint
+    to: free_view_idle
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsIdle
+      compareType: 2
+      compareValue: 1
+  - id: 20baea471c34ae84e9420fb9391c6b65
+    from: free_view_idle
+    to: free_view_sprint
+    baseConditionsName: []
+    parameterConditionDatas:
+    - parameterName: IsWalk
+      compareType: 2
+      compareValue: 1
+    - parameterName: IsRun
+      compareType: 2
+      compareValue: 1
+  previousStateMethodsName:
+  - on_normal_idle_execute
+  - on_normal_walk_execute
+  - on_normal_talk_execute
+  - on_look_to_target_idle_execute
+  - on_look_to_target_walk_execute
+  - on_dodge_execute
+  - on_free_view_idle_execute
+  - on_free_view_run_execute
+  - on_roll_execute
+  - on_free_view_sprint_execute
+  - on_attack_execute
+  - on_get_hit_execute
+  previousServiceMethodsName:
+  - on_ProcessInput_service
+  - on_CheckGetHit_service
+  - on_ProcessTalk_service
+  - on_ProcessRollOrDodge_service
+  - on_ProcessAttack_service
+  - on_FaceToTarget_service
+  previousCanExitMethodsName:
+  - can_normal_talk_exit
+  - can_dodge_exit
+  - can_roll_exit
+  - can_attack_exit
+  - can_get_hit_exit

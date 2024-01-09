@@ -10,7 +10,7 @@ namespace RPGCore.AI.HFSM
 		public ServiceType serviceType => m_serviceType;
 		private ServiceType m_serviceType;
 		public bool pauseService => m_pauseService;
-		private bool m_pauseService;
+		private bool m_pauseService = false;
 		public StateMachine serviceOwner => m_serviceOwner;
 		private StateMachine m_serviceOwner;
 
@@ -40,6 +40,7 @@ namespace RPGCore.AI.HFSM
 		public void OnBeginService()
 		{
 			timer.Reset();
+			m_pauseService = false;
 			if (m_beginService != null)
 			{
 				m_beginService.Invoke(this);
@@ -52,7 +53,8 @@ namespace RPGCore.AI.HFSM
 
 		public void OnSercive()
 		{
-			if (m_pauseService || m_serviceAction != null)
+			if (m_pauseService) return;
+			if (m_serviceAction != null)
 			{
 				m_serviceAction.Invoke(this);
 				return;

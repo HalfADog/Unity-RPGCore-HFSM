@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4898048c3075b834fad99edf15a3d460, type: 3}
+  m_Name: PM_FreeViewSprint
+  m_EditorClassIdentifier: 
+  animName: FreeViewSprint
+  animClip: {fileID: 7400000, guid: a36f4ac4f100d3e4592a06b23c883d8f, type: 2}
+  animPlayType: 0
+  animPriority: 0
+  canAbort: 1
+  abortType: 0
+  multiplier: 1
+  offset: 0
