@@ -26,7 +26,6 @@ namespace RPGCore.AI.HFSM
 			{
 				helper.HFSMController.RenameState(helper.stateData, newName);
 				stateName = newName;
-				EditorUtility.SetDirty(helper.HFSMController);
 			}
 			EditorGUILayout.EndHorizontal();
 
@@ -38,7 +37,7 @@ namespace RPGCore.AI.HFSM
 			description = EditorGUILayout.DelayedTextField(description);
 			if (EditorGUI.EndChangeCheck())
 			{
-				helper.stateData.description = description;
+				helper.HFSMController.RenameState(helper.stateData, description, true, false);
 			}
 			EditorGUILayout.EndHorizontal();
 
@@ -47,19 +46,30 @@ namespace RPGCore.AI.HFSM
 			EditorGUI.BeginDisabledGroup(disable);
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField("is temporary", GUILayout.Width(80));
-			helper.stateData.isTemporary = GUILayout.Toggle(helper.stateData.isTemporary, "");
+			helper.stateData.isTemporary = GUILayout.Toggle(helper.stateData.isTemporary, "", GUILayout.Width(20));
 			EditorGUILayout.EndHorizontal();
 			EditorGUI.EndDisabledGroup();
 
 			EditorGUILayout.Space();
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField("handle exit", GUILayout.Width(80));
-			EditorGUILayout.BeginVertical();
-			helper.stateData.canExitHandle = GUILayout.Toggle(helper.stateData.canExitHandle, "");
+			helper.stateData.canExitHandle = GUILayout.Toggle(helper.stateData.canExitHandle, "",GUILayout.Width(20));
 			EditorGUI.BeginDisabledGroup(!helper.stateData.canExitHandle);
-			helper.stateData.canExitDescription = GUILayout.TextField(helper.stateData.canExitDescription);
+			EditorGUI.BeginChangeCheck();
+			string ceDescription = EditorGUILayout.DelayedTextField(helper.stateData.canExitDescription);
+			if (EditorGUI.EndChangeCheck())
+			{
+				helper.HFSMController.RenameState(helper.stateData, ceDescription, true, true);
+			}
 			EditorGUI.EndDisabledGroup();
-			EditorGUILayout.EndVertical();
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.Space();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUI.BeginDisabledGroup(!helper.HFSMController.controllerConfig.DisperseGenerate || helper.HFSMController.controllerConfig.DisperseAll);
+			EditorGUILayout.LabelField(new GUIContent("independent", "Generate script files independently"), GUILayout.Width(80));
+			helper.stateData.independentGenerate = GUILayout.Toggle(helper.stateData.independentGenerate, "", GUILayout.Width(20));
+			EditorGUI.EndDisabledGroup();
 			EditorGUILayout.EndHorizontal();
 
 			EditorGUILayout.EndVertical();
@@ -74,9 +84,9 @@ namespace RPGCore.AI.HFSM
 			EditorGUILayout.BeginHorizontal();
 
 			GUILayout.Label(EditorGUIUtility.IconContent("icons/processed/unityeditor/animations/animatorstate icon.asset"), GUILayout.Width(30), GUILayout.Height(30));
-			EditorGUILayout.LabelField("Name", GUILayout.Width(80));
+			EditorGUILayout.LabelField("Name",style: "HeaderLabel", GUILayout.Width(50));
 
-			EditorGUILayout.LabelField(stateName);
+			EditorGUILayout.LabelField(helper.stateData.id);
 
 			EditorGUILayout.EndHorizontal();
 

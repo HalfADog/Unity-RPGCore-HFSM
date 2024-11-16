@@ -47,11 +47,12 @@ MonoBehaviour:
   states:
   - position:
       serializedVersion: 2
-      x: 683.73346
-      y: -45.66667
+      x: 573.73413
+      y: -15.666675
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: get_hit
     stateType: 0
     isDefault: 0
@@ -66,6 +67,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: normal_idle
     stateType: 0
     isDefault: 1
@@ -80,6 +82,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: normal_walk
     stateType: 0
     isDefault: 0
@@ -94,6 +97,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: free_view_idle
     stateType: 0
     isDefault: 1
@@ -108,6 +112,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: free_view_run
     stateType: 0
     isDefault: 0
@@ -122,6 +127,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: roll
     stateType: 0
     isDefault: 0
@@ -136,6 +142,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: look_to_target_idle
     stateType: 0
     isDefault: 1
@@ -150,6 +157,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: look_to_target_walk
     stateType: 0
     isDefault: 0
@@ -164,6 +172,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: dodge
     stateType: 0
     isDefault: 0
@@ -178,6 +187,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: attack
     stateType: 0
     isDefault: 0
@@ -187,11 +197,12 @@ MonoBehaviour:
     canExitDescription: 
   - position:
       serializedVersion: 2
-      x: 781.5995
-      y: -149.00003
+      x: 721.59985
+      y: -218.99992
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: normal_talk
     stateType: 0
     isDefault: 0
@@ -206,6 +217,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: free_view_sprint
     stateType: 0
     isDefault: 0
@@ -221,6 +233,7 @@ MonoBehaviour:
       width: 0
       height: 0
     isExecuting: 0
+    independentGenerate: 1
     id: Root
     stateType: 1
     isDefault: 0
@@ -248,10 +261,11 @@ MonoBehaviour:
       position:
         serializedVersion: 2
         x: -239.9999
-        y: -3.3333108
+        y: -19.999977
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Any
       stateType: 0
       isDefault: 0
@@ -262,11 +276,12 @@ MonoBehaviour:
     entry:
       position:
         serializedVersion: 2
-        x: -336.66663
-        y: 550
+        x: -249.99986
+        y: 493.33344
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Entry
       stateType: 0
       isDefault: 0
@@ -276,11 +291,12 @@ MonoBehaviour:
       canExitDescription: 
   - position:
       serializedVersion: 2
-      x: 523.7342
-      y: 434.33362
+      x: 573.7339
+      y: 487.66705
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 1
     id: normal
     stateType: 1
     isDefault: 1
@@ -308,6 +324,7 @@ MonoBehaviour:
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Any
       stateType: 0
       isDefault: 0
@@ -323,6 +340,7 @@ MonoBehaviour:
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Entry
       stateType: 0
       isDefault: 0
@@ -332,11 +350,12 @@ MonoBehaviour:
       canExitDescription: 
   - position:
       serializedVersion: 2
-      x: 1013.73364
-      y: 847.66534
+      x: 577.06793
+      y: 820.9989
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 1
     id: battle
     stateType: 1
     isDefault: 0
@@ -368,6 +387,7 @@ MonoBehaviour:
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Any
       stateType: 0
       isDefault: 0
@@ -378,11 +398,12 @@ MonoBehaviour:
     entry:
       position:
         serializedVersion: 2
-        x: -413.33334
-        y: 286.66644
+        x: -349.99982
+        y: 139.9999
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Entry
       stateType: 0
       isDefault: 0
@@ -397,6 +418,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 1
     id: battle_look_to_target
     stateType: 1
     isDefault: 0
@@ -420,11 +442,12 @@ MonoBehaviour:
     any:
       position:
         serializedVersion: 2
-        x: 43.333317
-        y: 66.66665
+        x: 79.999985
+        y: -0.0000071525574
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Any
       stateType: 0
       isDefault: 0
@@ -435,11 +458,12 @@ MonoBehaviour:
     entry:
       position:
         serializedVersion: 2
-        x: -3.333348
-        y: 446.66675
+        x: 69.99998
+        y: 349.99994
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Entry
       stateType: 0
       isDefault: 0
@@ -450,10 +474,11 @@ MonoBehaviour:
   - position:
       serializedVersion: 2
       x: 617.06616
-      y: 174.33354
+      y: 144.33359
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: battle_free_view
     stateType: 1
     isDefault: 1
@@ -485,6 +510,7 @@ MonoBehaviour:
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Any
       stateType: 0
       isDefault: 0
@@ -495,11 +521,12 @@ MonoBehaviour:
     entry:
       position:
         serializedVersion: 2
-        x: -150.00002
-        y: 433.33337
+        x: -366.6668
+        y: 306.66644
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Entry
       stateType: 0
       isDefault: 0
@@ -692,29 +719,288 @@ MonoBehaviour:
     - parameterName: IsRun
       compareType: 2
       compareValue: 1
-  previousStateMethodsName:
-  - on_normal_idle_execute
-  - on_normal_walk_execute
-  - on_normal_talk_execute
-  - on_look_to_target_idle_execute
-  - on_look_to_target_walk_execute
-  - on_dodge_execute
-  - on_free_view_idle_execute
-  - on_free_view_run_execute
-  - on_roll_execute
-  - on_free_view_sprint_execute
-  - on_attack_execute
-  - on_get_hit_execute
-  previousServiceMethodsName:
-  - on_ProcessInput_service
-  - on_CheckGetHit_service
-  - on_ProcessTalk_service
-  - on_ProcessRollOrDodge_service
-  - on_ProcessAttack_service
-  - on_FaceToTarget_service
-  previousCanExitMethodsName:
-  - can_normal_talk_exit
-  - can_dodge_exit
-  - can_roll_exit
-  - can_attack_exit
-  - can_get_hit_exit
+  methodBlocks:
+  - methodType: 1
+    targetName: Root/ProcessInput
+    targetDescription: 
+    methodAttributeLine: "\t[Service(\"Root/ProcessInput\")]\n"
+    methodHeadLine: "\tprivate void on_ProcessInput_service(Service service, ServiceExecuteType
+      type)\n"
+    methodBodyLines: "\t\tmoveVec.x = (Input.GetKey(KeyCode.A) ? -1 : 0) + (Input.GetKey(KeyCode.D)
+      ? 1 : 0);\r\n\t\tmoveVec.y = (Input.GetKey(KeyCode.S) ? -1 : 0) + (Input.GetKey(KeyCode.W)
+      ? 1 : 0);\r\n\t\tmoveVec = moveVec.normalized;\r\n\t\tSetBool(\"IsIdle\", moveVec.sqrMagnitude
+      == 0);\r\n\t\tSetBool(\"IsWalk\", moveVec.sqrMagnitude != 0);\r\n\t\tSetBool(\"IsRun\",
+      Input.GetKey(KeyCode.LeftShift));\r\n\t\tif (moveVec.sqrMagnitude != 0)\r\n\t\t{\r\n\t\t\tif
+      (!GetBool(\"IsLookToTarget\"))\r\n\t\t\t{\r\n\t\t\t\tgameObject.transform.forward
+      = Vector3.Lerp(gameObject.transform.forward, new Vector3(moveVec.x, 0, moveVec.y),
+      Time.deltaTime * 10);\r\n\t\t\t}\r\n\t\t}\r\n\t\tif (Input.GetKeyDown(KeyCode.Tab))\r\n\t\t{\r\n\t\t\tSetBool(\"IsOnBattle\",
+      !GetBool(\"IsOnBattle\"));\r\n\t\t}\n"
+    linePosition: 20
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 1
+    targetName: Root/CheckGetHit
+    targetDescription: 
+    methodAttributeLine: "\t[Service(\"Root/CheckGetHit\")]\n"
+    methodHeadLine: "\tprivate void on_CheckGetHit_service(Service service, ServiceExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (playerManager.beAttack)\r\n\t\t{\r\n\t\t\tif (executeState
+      != \"roll\" && executeState != \"dodge\") SetTrigger(\"GetHit\");\r\n\t\t\tplayerManager.beAttack
+      = false;\r\n\t\t}\n"
+    linePosition: 42
+    independentGenerate: 0
+    isDeleted: 0
+  - methodType: 1
+    targetName: normal/ProcessTalk
+    targetDescription: 
+    methodAttributeLine: "\t[Service(\"normal/ProcessTalk\")]\n"
+    methodHeadLine: "\tprivate void on_ProcessTalk_service(Service service, ServiceExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (Input.GetKeyDown(KeyCode.T))\r\n\t\t{\r\n\t\t\tSetTrigger(\"Talk\");\r\n\t\t}\n"
+    linePosition: 52
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 1
+    targetName: battle/ProcessRollOrDodge
+    targetDescription: 
+    methodAttributeLine: "\t[Service(\"battle/ProcessRollOrDodge\")]\n"
+    methodHeadLine: "\tprivate void on_ProcessRollOrDodge_service(Service service,
+      ServiceExecuteType type)\n"
+    methodBodyLines: "\t\tif (Input.GetMouseButtonDown(1))\r\n\t\t{\r\n\t\t\tSetTrigger(\"RollOrDodge\");\r\n\t\t}\r\n\t\tif
+      (Input.GetKeyDown(KeyCode.V))\r\n\t\t{\r\n\t\t\tSetBool(\"IsLookToTarget\",
+      !GetBool(\"IsLookToTarget\"));\r\n\t\t}\n"
+    linePosition: 61
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 1
+    targetName: battle/ProcessAttack
+    targetDescription: 
+    methodAttributeLine: "\t[Service(\"battle/ProcessAttack\")]\n"
+    methodHeadLine: "\tprivate void on_ProcessAttack_service(Service service, ServiceExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (Input.GetMouseButtonDown(0))\r\n\t\t{\r\n\t\t\tSetTrigger(\"Attack\");\r\n\t\t}\n"
+    linePosition: 74
+    independentGenerate: 0
+    isDeleted: 0
+  - methodType: 1
+    targetName: battle_look_to_target/FaceToTarget
+    targetDescription: 
+    methodAttributeLine: "\t[Service(\"battle_look_to_target/FaceToTarget\")]\n"
+    methodHeadLine: "\tprivate void on_FaceToTarget_service(Service service, ServiceExecuteType
+      type)\n"
+    methodBodyLines: "\t\tVector3 tForward = (lookTarget.position - gameObject.transform.position).normalized;\r\n\t\ttForward.y
+      = 0;\r\n\t\tgameObject.transform.forward = Vector3.Lerp(gameObject.transform.forward,
+      tForward, Time.deltaTime * 20);\n"
+    linePosition: 83
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: normal_idle
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"normal_idle\")]\n"
+    methodHeadLine: "\tprivate void on_normal_idle_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(\"NormalIdle\");\r\n\t\t}\n"
+    linePosition: 21
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: normal_walk
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"normal_walk\")]\n"
+    methodHeadLine: "\tprivate void on_normal_walk_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(\"NormalWalk\");\r\n\t\t}\n"
+    linePosition: 30
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: normal_talk
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"normal_talk\")]\n"
+    methodHeadLine: "\tprivate void on_normal_talk_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(\"NormalTalk\");\r\n\t\t\tPauseService(\"ProcessInput\");\r\n\t\t}\r\n\t\telse
+      if (type == StateExecuteType.OnExit)\r\n\t\t{\r\n\t\t\tContinueService(\"ProcessInput\");\r\n\t\t}\n"
+    linePosition: 39
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: look_to_target_idle
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"look_to_target_idle\")]\n"
+    methodHeadLine: "\tprivate void on_look_to_target_idle_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\n\t\t\tanimPlayer.RequestTransition(\"BattleIdle\");\n\t\t}\n"
+    linePosition: 58
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: look_to_target_walk
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"look_to_target_walk\")]\n"
+    methodHeadLine: "\tprivate void on_look_to_target_walk_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (Mathf.Abs(moveVec.x) == 1)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(moveVec.x
+      == 1 ? \"LookToTargetRight\" : \"LookToTargetLeft\");\r\n\t\t}\r\n\t\telse
+      if (Mathf.Abs(moveVec.y) == 1)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(moveVec.y
+      == 1 ? \"LookToTargetForward\" : \"LookToTargetBackward\");\r\n\t\t}\n"
+    linePosition: 67
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: dodge
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"dodge\")]\n"
+    methodHeadLine: "\tprivate void on_dodge_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tif
+      (moveVec.x == 1) { animPlayer.RequestTransition(\"DodgeRight\"); }\r\n\t\t\telse
+      if (moveVec.x == -1) { animPlayer.RequestTransition(\"DodgeLeft\"); }\r\n\t\t\tPauseService(\"ProcessInput\");\r\n\t\t}\r\n\t\telse
+      if (type == StateExecuteType.OnExit)\r\n\t\t{\r\n\t\t\tContinueService(\"ProcessInput\");\r\n\t\t}\n"
+    linePosition: 80
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: free_view_idle
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"free_view_idle\")]\n"
+    methodHeadLine: "\tprivate void on_free_view_idle_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(\"BattleIdle\");\r\n\t\t}\n"
+    linePosition: 100
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: free_view_run
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"free_view_run\")]\n"
+    methodHeadLine: "\tprivate void on_free_view_run_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(\"FreeViewRun\");\r\n\t\t}\n"
+    linePosition: 109
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: roll
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"roll\")]\n"
+    methodHeadLine: "\tprivate void on_roll_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(\"Roll\");\r\n\t\t\tPauseService(\"ProcessInput\");\r\n\t\t}\r\n\t\telse
+      if (type == StateExecuteType.OnExit)\r\n\t\t{\r\n\t\t\tContinueService(\"ProcessInput\");\r\n\t\t}\n"
+    linePosition: 118
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: free_view_sprint
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"free_view_sprint\")]\n"
+    methodHeadLine: "\tprivate void on_free_view_sprint_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(\"FreeViewSprint\");\r\n\t\t}\n"
+    linePosition: 137
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: attack
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"attack\")]\n"
+    methodHeadLine: "\tprivate void on_attack_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(\"BattleAttack\");\r\n\t\t\tPauseService(\"ProcessInput\");\r\n\t\t}\r\n\t\telse
+      if (type == StateExecuteType.OnExit)\r\n\t\t{\r\n\t\t\tContinueService(\"ProcessInput\");\r\n\t\t}\n"
+    linePosition: 146
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: get_hit
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"get_hit\")]\n"
+    methodHeadLine: "\tprivate void on_get_hit_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimPlayer.RequestTransition(\"GetHit\");\r\n\t\t\tPauseService(\"ProcessInput\");\r\n\t\t}\r\n\t\telse
+      if (type == StateExecuteType.OnExit)\r\n\t\t{\r\n\t\t\tContinueService(\"ProcessInput\");\r\n\t\t}\n"
+    linePosition: 165
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 2
+    targetName: normal_talk
+    targetDescription: 
+    methodAttributeLine: "\t[CanExit(\"normal_talk\")]\n"
+    methodHeadLine: "\tprivate bool can_normal_talk_exit(State state)\n"
+    methodBodyLines: "\t\treturn animPlayer.CurrentFinishPlaying;\n"
+    linePosition: 0
+    independentGenerate: 0
+    isDeleted: 0
+  - methodType: 2
+    targetName: dodge
+    targetDescription: "\u5F53Dodge\u7684\u52A8\u753B\u64AD\u653E\u5B8C\u6210\u65F6\u81EA\u52A8\u56DE\u5230Idle\u72B6\u6001"
+    methodAttributeLine: "\t[CanExit(\"dodge\",\"\u5F53Dodge\u7684\u52A8\u753B\u64AD\u653E\u5B8C\u6210\u65F6\u81EA\u52A8\u56DE\u5230Idle\u72B6\u6001\")]\n"
+    methodHeadLine: "\tprivate bool can_dodge_exit(State state)\n"
+    methodBodyLines: "\t\treturn animPlayer.CurrentFinishPlaying;\n"
+    linePosition: 0
+    independentGenerate: 0
+    isDeleted: 0
+  - methodType: 2
+    targetName: roll
+    targetDescription: "\u5F53Roll\u7684\u52A8\u753B\u64AD\u653E\u5B8C\u6210\u65F6\u81EA\u52A8\u56DE\u5230Idle\u72B6\u6001"
+    methodAttributeLine: "\t[CanExit(\"roll\",\"\u5F53Roll\u7684\u52A8\u753B\u64AD\u653E\u5B8C\u6210\u65F6\u81EA\u52A8\u56DE\u5230Idle\u72B6\u6001\")]\n"
+    methodHeadLine: "\tprivate bool can_roll_exit(State state)\n"
+    methodBodyLines: "\t\treturn animPlayer.CurrentFinishPlaying;\n"
+    linePosition: 0
+    independentGenerate: 0
+    isDeleted: 0
+  - methodType: 2
+    targetName: attack
+    targetDescription: 
+    methodAttributeLine: "\t[CanExit(\"attack\")]\n"
+    methodHeadLine: "\tprivate bool can_attack_exit(State state)\n"
+    methodBodyLines: "\t\treturn animPlayer.CurrentFinishPlaying || GetTrigger(\"RollOrDodge\")
+      || GetTrigger(\"GetHit\");\n"
+    linePosition: 0
+    independentGenerate: 0
+    isDeleted: 0
+  - methodType: 2
+    targetName: get_hit
+    targetDescription: 
+    methodAttributeLine: "\t[CanExit(\"get_hit\")]\n"
+    methodHeadLine: "\tprivate bool can_get_hit_exit(State state)\n"
+    methodBodyLines: "\t\treturn animPlayer.CurrentFinishPlaying;\n"
+    linePosition: 0
+    independentGenerate: 0
+    isDeleted: 0
+  beforeMethod: "using RPGCore.AI.HFSM;\nusing RPGCore.Animation;\nusing UnityEngine;\npublic
+    partial class PlayerMovementController : StateMachineScriptController\n{\n\tprivate
+    AnimationPlayerManager animPlayer;\r\n\tprivate Vector2 moveVec = new Vector2();\r\n\tprivate
+    Transform lookTarget;\r\n\tprivate PlayerManager playerManager;\n\tpublic override
+    void Init()\n\t{\n\t\tanimPlayer = gameObject.GetComponent<AnimationPlayerManager>();\r\n\t\tplayerManager
+    = gameObject.GetComponent<PlayerManager>();\r\n\t\tlookTarget = playerManager.lookTarget;\n\t}\n//Don't
+    delete or modify the #region & #endregion\n#region Method\n"
+  afterMethod: '#endregion Method
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'
+  isGenerated: 1
+  controllerConfig:
+    CustomFilePath: 1
+    FilePath: Assets/Scripts/Unity-RPGCore-HFSM/Example/Scripts/GeneratedScripts
+    UseNamespace: 0
+    Namespace: 
+    DisperseGenerate: 1
+    DisperseAll: 1
+  generateFilePath: D:/UnityProject/CardTDProject/Assets/Scripts/Unity-RPGCore-HFSM/Example/Scripts/GeneratedScripts/

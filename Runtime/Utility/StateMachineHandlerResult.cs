@@ -150,7 +150,7 @@ namespace RPGCore.AI.HFSM
 		{
 			if (m_createdTransition != null)
 			{
-				Parameter parameter = StateMachineHandler.currentHandledController.parameters.Find(param => param.name == paramterName && param.type == parameterType);
+				Parameter parameter = StateMachineHandler.currentHandledController.parameters[paramterName];
 				if (parameter == null)
 				{
 					throw new Exception($"paramter named {paramterName} is not exist.");

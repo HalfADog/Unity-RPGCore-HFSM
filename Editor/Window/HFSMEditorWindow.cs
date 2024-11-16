@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,6 +13,7 @@ namespace RPGCore.AI.HFSM
 		private IMGUIContainer parametersContaner;
 		private IMGUIContainer stateMachinePathContaner;
 		private VisualElement noticeBoard;
+		private ToolbarButton generateButton;
 		private Context m_context = new Context();
 		public Context context => m_context;
 		private List<GraphLayer> graphLayerList = new List<GraphLayer>();
@@ -50,6 +52,11 @@ namespace RPGCore.AI.HFSM
 				parametersContaner = Root.Q<IMGUIContainer>("ParametersIMGUI");
 				stateMachinePathContaner = Root.Q<IMGUIContainer>("StateLayerIMGUI");
 				noticeBoard = Root.Q<VisualElement>("Notice");
+				generateButton = Root.Q<ToolbarButton>("GenerateButton");
+				generateButton.RegisterCallback<ClickEvent>(callback => 
+				{
+					context.HFSMController.GenerateScriptController();
+				});
 				stateMachinePathContaner.onGUIHandler += StateMachinePathOnGUI;
 				parametersContaner.onGUIHandler += ParametersOnGUI;
 				stateGraphContaner.onGUIHandler += StateGraphOnGUI;

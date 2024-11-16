@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Unity.VisualScripting;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -43,29 +43,29 @@ namespace RPGCore.AI.HFSM
 
 		//记录当前有哪些方法需要构造
 		private Dictionary<string, string> stateMethods = new Dictionary<string, string>();
-
 		private Dictionary<string, string> serviceMethods = new Dictionary<string, string>();
 		private Dictionary<string, string> canExitMethods = new Dictionary<string, string>();
 
-		//记录上一次生成了哪些方法 方便这次比较不同并更新修改
-		public List<string> previousStateMethodsName = new List<string>();
-
-		public List<string> previousServiceMethodsName = new List<string>();
-
-		public List<string> previousCanExitMethodsName = new List<string>();
-
-		private void Awake()
-		{
-		}
-
+		//记录所有方法的信息包括代码
+		public List<MethodBlock> methodBlocks = new List<MethodBlock>();
+		public string beforeMethod;
+		public string afterMethod;
+		public bool isGenerated;
+		//配置文件SO
+		public StateMachineControllerConfig controllerConfig = new StateMachineControllerConfig();
+		//文件生成位置
+		public string generateFilePath = "";
 		/// <summary>
 		/// 根据此获取运行时Controller
 		/// </summary>
 		public StateMachineScriptController GetController()
 		{
 			List<Type> types = new List<Type>();
-			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies().Where(assembly => assembly.GetName().Name.Contains("Assembly")))
+			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
+				if (assembly.FullName.Contains("UnityEngine") || assembly.FullName.Contains("UnityEditor") ||
+					assembly.FullName.Contains("Unity") || assembly.FullName.Contains("System") ||
+					assembly.FullName.Contains("Microsoft")) continue;
 				List<Type> result = assembly.GetTypes().Where(type =>
 				{
 					return type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(StateMachineScriptController)) && type.GetCustomAttribute<StateMachineControllerAttribute>() != null;
@@ -102,22 +102,29 @@ namespace RPGCore.AI.HFSM
 		/// </summary>
 		public void GenerateScriptController()
 		{
-			scriptableObjectAssetPath = AssetDatabase.GetAssetPath(this);
-			if (scriptableObjectAssetPath != "")
+			if (controllerConfig.CustomFilePath && controllerConfig.FilePath != "")
 			{
-				scriptableObjectAssetPath = scriptableObjectAssetPath.Remove(scriptableObjectAssetPath.LastIndexOf("/") + 1);
+				generateFilePath = Application.dataPath.Replace("Assets", "") + controllerConfig.FilePath+"/";
 			}
-			string filePath = Application.dataPath.Replace("Assets", "") + scriptableObjectAssetPath;
+			else
+			{
+				scriptableObjectAssetPath = AssetDatabase.GetAssetPath(this);
+				if (scriptableObjectAssetPath != "")
+				{
+					scriptableObjectAssetPath = scriptableObjectAssetPath.Remove(scriptableObjectAssetPath.LastIndexOf("/") + 1);
+				}
+				generateFilePath = Application.dataPath.Replace("Assets", "") + scriptableObjectAssetPath;
+			}
 			realScriptControllerName = name.Replace(" ", "");
-			GenerateConstructHFSMCode(filePath);
-			GenerateHFSMCustomMethodCode(filePath);
+			GenerateConstructScript(generateFilePath);
+			GenerateMethodScripts(generateFilePath);
 			AssetDatabase.Refresh();
 		}
 
 		/// <summary>
-		/// 生成构造层状态机的代码
+		/// 生成构造层状态机的代码脚本
 		/// </summary>
-		private void GenerateConstructHFSMCode(string filePath)
+		private void GenerateConstructScript(string filePath)
 		{
 			StringBuilder generateString = new StringBuilder();
 			StateMachineData rootData = stateMachines.Find(sm => sm.isRoot);
@@ -125,7 +132,7 @@ namespace RPGCore.AI.HFSM
 			serviceMethods.Clear();
 			canExitMethods.Clear();
 			generateString.AppendLine($"		StateMachineHandler.BeginStateMachine(this, \"{rootData.id}\")");
-			GenerateConstructStateMachineCode(rootData, generateString, 3);
+			GenerateConstructCode(rootData, generateString, 3);
 			generateString.AppendLine("			.EndHandle();");
 			generateString.AppendLine("		return StateMachineHandler.EndStateMachine();");
 			string constructScript =
@@ -146,55 +153,9 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// 生成构造的状态机中自定义方法的代码
-		/// </summary>
-		private void GenerateHFSMCustomMethodCode(string filePath)
-		{
-			FileStream fileStream = null;
-			StringBuilder generateString = new StringBuilder();
-			byte[] byteArray;
-			//如果脚本存在 则进行修改;不存在则直接创建
-			if (File.Exists(filePath + realScriptControllerName + ".cs"))
-			{
-				fileStream = File.OpenRead(filePath + realScriptControllerName + ".cs");
-				byte[] buffer = new byte[1024];
-				int bytesRead = fileStream.Read(buffer, 0, buffer.Length);
-				while (bytesRead > 0)
-				{
-					generateString.Append(Encoding.Default.GetString(buffer, 0, bytesRead));
-					bytesRead = fileStream.Read(buffer, 0, buffer.Length);
-				}
-				fileStream.Close();
-				GenerateCustomMethodCode(generateString);
-				byteArray = Encoding.UTF8.GetBytes(generateString.ToString());
-			}
-			else
-			{
-				GenerateCustomMethodCode(generateString);
-				string customMethodScript =
-				"using RPGCore.AI.HFSM;\n" +
-				"using UnityEngine;\n" +
-				$"public partial class {realScriptControllerName} : StateMachineScriptController\n" +
-				"{\n" +
-				"	public override void Init()\n" +
-				"	{\n" +
-				"	}\n" +
-				"//Don't delete or modify the #region & #endregion\n" +
-				"#region Method\n" +
-				generateString.ToString() +
-				"#endregion Method\n" +
-				"}\n";
-				byteArray = Encoding.UTF8.GetBytes(customMethodScript);
-			}
-			fileStream = File.Create(filePath + realScriptControllerName + ".cs");
-			fileStream.Write(byteArray, 0, byteArray.Length);
-			fileStream.Close();
-		}
-
-		/// <summary>
 		/// 自顶向下生成构造状态机代码；
 		/// </summary>
-		private void GenerateConstructStateMachineCode(StateMachineData stateMachineData, StringBuilder constructString, int level)
+		private void GenerateConstructCode(StateMachineData stateMachineData, StringBuilder constructString, int level)
 		{
 			List<StateBaseData> allStates = new List<StateBaseData>();
 			allStates.AddRange(states);
@@ -206,8 +167,8 @@ namespace RPGCore.AI.HFSM
 			{
 				ServiceData service = stateMachineData.services[i];
 				constructString.AppendLine(interval + $".AddService(\"{service.id}\",ServiceType.{service.serviceType.ToString()},{service.customInterval})"
-					+ $".OnService(on_{service.id}_service)");
-				serviceMethods[$"on_{service.id}_service"] = $"{service.description}";
+					+ $".OnService(on_{service.id.Replace(" ","")}_service)");
+				serviceMethods[stateMachineData.id+"/"+service.id] = $"{service.description}";
 			}
 			//再添加所有的state与StateMachine
 			for (int i = 0; i < stateMachineData.childStates.Count; i++)
@@ -216,24 +177,24 @@ namespace RPGCore.AI.HFSM
 				if (state.stateType == StateType.StateMachine)
 				{
 					constructString.AppendLine(interval + $".AddStateMachine(\"{state.id}\", {(state.id == stateMachineData.defaultState).ToString().ToLower()})");
-					GenerateConstructStateMachineCode(state as StateMachineData, constructString, level + 1);
+					GenerateConstructCode(state as StateMachineData, constructString, level + 1);
 				}
 				else
 				{
 					if ((state as StateData).isTemporary)
 					{
-						constructString.AppendLine(interval + $".AddTemporaryState(\"{state.id}\")" + $".OnExecute(on_{state.id}_execute)");
+						constructString.AppendLine(interval + $".AddTemporaryState(\"{state.id}\")" + $".OnExecute(on_{state.id.Replace(" ", "")}_execute)");
 					}
 					else
 					{
-						constructString.AppendLine(interval + $".AddState(\"{state.id}\", {(state.id == stateMachineData.defaultState).ToString().ToLower()})" + $".OnExecute(on_{state.id}_execute)");
+						constructString.AppendLine(interval + $".AddState(\"{state.id}\", {(state.id == stateMachineData.defaultState).ToString().ToLower()})" + $".OnExecute(on_{state.id.Replace(" ", "")}_execute)");
 					}
 					if ((state as StateData).canExitHandle)
 					{
-						constructString.AppendLine('\t' + interval + $".CanExit(can_{state.id}_exit)");
-						canExitMethods[$"can_{state.id}_exit"] = (state as StateData).canExitDescription;
+						constructString.AppendLine('\t' + interval + $".CanExit(can_{state.id.Replace(" ", "")}_exit)");
+						canExitMethods[state.id] = (state as StateData).canExitDescription;
 					}
-					stateMethods[$"on_{state.id}_execute"] = $"{state.description}";
+					stateMethods[state.id] = $"{state.description}";
 				}
 			}
 			//最后处理所有的Transition
@@ -282,163 +243,317 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// 根据当前Controller中的信息生成自定义方法的代码
+		/// 生成方法代码文件
 		/// </summary>
-		private void GenerateCustomMethodCode(StringBuilder constructString)
+		public void GenerateMethodScripts(string filePath)
 		{
-			if (constructString.Length == 0)
+			//如果当前Controller创建后没有生成过脚本文件
+			if (!isGenerated)
 			{
-				if (serviceMethods.Count == 0)
-				{
-					constructString.Append("	//StateMachine Service Code Here\n");
-					constructString.Append("	//private void serviceMethodName(Service service, ServiceExecuteType type)\n");
-				}
+				//先将Controller中的内容转化为MethodBlocks中的数据
 				foreach (var service in serviceMethods)
 				{
-					foreach (var item in GetStateMachineServiceMethodCode(service.Key, service.Value))
+					MethodBlock block = new MethodBlock(MethodType.Service, service.Key, service.Value);
+					if (controllerConfig.DisperseGenerate)
 					{
-						constructString.Append(item + '\n');
+						block.independentGenerate = (stateMachines.Find(s => s.id == block.targetName.Split("/")[0])?.independentGenerate ?? false) || controllerConfig.DisperseAll;
 					}
-					previousServiceMethodsName.Add(service.Key);
+					else 
+					{
+						block.independentGenerate = false;
+					}
+					methodBlocks.Add(block);
 				}
 				foreach (var state in stateMethods)
 				{
-					foreach (var item in GetStateMethodCode(state.Key, state.Value))
+					MethodBlock block = new MethodBlock(MethodType.State, state.Key, state.Value);
+					if (controllerConfig.DisperseGenerate)
 					{
-						constructString.Append(item + '\n');
+						block.independentGenerate = (states.Find(s => s.id == block.targetName)?.independentGenerate ?? false) || controllerConfig.DisperseAll;
 					}
-					previousStateMethodsName.Add(state.Key);
-				}
-				if (canExitMethods.Count == 0)
-				{
-					constructString.Append("	//State Can Exit Code Here\n");
-					constructString.Append("	//private bool stateName(State state)\n");
-				}
-				foreach (var canexit in canExitMethods)
-				{
-					foreach (var item in GetCanExitMethodCode(canexit.Key, canexit.Value))
+					else
 					{
-						constructString.Append(item + '\n');
+						block.independentGenerate = false;
 					}
-					previousCanExitMethodsName.Add(canexit.Key);
+					methodBlocks.Add(block);
+				}
+				foreach (var canExit in canExitMethods)
+				{
+					MethodBlock block = new MethodBlock(MethodType.CanExit, canExit.Key, canExit.Value);
+					//block.independentGenerate = states.Find(s => s.id == block.targetName)?.independentGenerate ?? false;
+					methodBlocks.Add(block);
+				}
+				//后根据MethodBlocks中的信息生成脚本文件
+				beforeMethod =
+					"using RPGCore.AI.HFSM;\n" +
+					"using UnityEngine;\n" +
+					$"public partial class {realScriptControllerName} : StateMachineScriptController\n" +
+					"{\n" +
+					"	public override void Init()\n" +
+					"	{\n" +
+					"	}\n" +
+					"//Don't delete or modify the #region & #endregion\n" +
+					"#region Method\n";
+				afterMethod =
+					"#endregion Method\n" +
+					"}\n";
+				GenerateDefaultMethodsScript(filePath,methodBlocks.Where(mb => !mb.independentGenerate).ToList());
+				foreach (var mb in methodBlocks.Where(mb => mb.independentGenerate))
+				{
+					GenerateIndependentMethodScript(filePath,mb);
+				}
+				isGenerated = true;
+			}
+			//如果生成过就根据Controller中的内容更新MethodBlocks中的信息
+			else 
+			{
+				//先根据脚本文件更新methodblock中的内容
+				UpdateMethodBlocksInfo(filePath+realScriptControllerName + "_Default.cs",true);
+				foreach (var mb in methodBlocks.Where(mb=>mb.independentGenerate))
+				{
+					string suffix = $"_{mb.targetName}";
+					if (mb.methodType == MethodType.Service) suffix = $"_{mb.targetName.Split("/")[1]}";
+					UpdateMethodBlocksInfo(filePath + realScriptControllerName + suffix + ".cs");
+				}
+				//然后把已经删除的Controller中对应的MethodBlock的内容删除
+				methodBlocks.ForEach(mb => mb.isDeleted = true);
+				foreach (var service in serviceMethods)
+				{
+					var m = methodBlocks.Find(mb => mb.methodType == MethodType.Service && mb.targetName == service.Key);
+					if (m == null)
+					{
+						MethodBlock block = new MethodBlock(MethodType.Service, service.Key, service.Value);
+						methodBlocks.Add(block);
+						m = block;
+					}
+					else m.isDeleted = false;
+					bool pres = m.independentGenerate;
+					if (controllerConfig.DisperseGenerate)
+					{
+						m.independentGenerate = (stateMachines.Find(s => s.id == m.targetName.Split("/")[0])?.independentGenerate ?? false) || controllerConfig.DisperseAll;
+					}
+					else
+					{
+						m.independentGenerate = false;
+					}
+					if (pres != m.independentGenerate) 
+					{
+						try
+						{
+							File.Delete(filePath + realScriptControllerName + $"_{m.targetName.Split("/")[0]}.cs");
+						}
+						catch
+						{
+							Debug.LogError("File delete failed");
+						}
+					}
+				}
+				foreach (var state in stateMethods)
+				{
+					var m = methodBlocks.Find(mb => mb.methodType == MethodType.State && mb.targetName == state.Key);
+					if (m == null)
+					{
+						MethodBlock block = new MethodBlock(MethodType.State, state.Key, state.Value);
+						methodBlocks.Add(block);
+						m = block;
+					}
+					else m.isDeleted = false;
+					bool pres = m.independentGenerate;
+					if (controllerConfig.DisperseGenerate)
+					{
+						m.independentGenerate = (states.Find(s => s.id == m.targetName)?.independentGenerate ?? false) || controllerConfig.DisperseAll;
+					}
+					else 
+					{
+						m.independentGenerate = false;
+					}
+					if (pres != m.independentGenerate)
+					{
+						try
+						{
+							File.Delete(filePath + realScriptControllerName + $"_{m.targetName}.cs");
+						}
+						catch
+						{
+							Debug.LogError("File delete failed");
+						}
+					}
+				}
+				foreach (var canExit in canExitMethods)
+				{
+					var m = methodBlocks.Find(mb => mb.methodType == MethodType.CanExit && mb.targetName == canExit.Key);
+					if (m == null)
+					{
+						MethodBlock block = new MethodBlock(MethodType.CanExit, canExit.Key, canExit.Value);
+						methodBlocks.Add(block);
+					}
+					else m.isDeleted = false;
+				}
+				methodBlocks.RemoveAll(mb => mb.isDeleted);
+				//最后生成脚本文件
+				GenerateDefaultMethodsScript(filePath, methodBlocks.Where(mb => !mb.independentGenerate).ToList());
+				foreach (var mb in methodBlocks.Where(mb => mb.independentGenerate))
+				{
+					GenerateIndependentMethodScript(filePath, mb);
 				}
 			}
-			else
+			Save();
+		}
+
+		/// <summary>
+		/// 生成非独立生成的方法代码脚本
+		/// </summary>
+		public void GenerateDefaultMethodsScript(string filePath,List<MethodBlock> targets) 
+		{
+			StringBuilder builder = new StringBuilder();
+			byte[] byteArray;
+			builder.Append(beforeMethod);
+			builder.Append("\t//Service Methods\n");
+			foreach (var mb in targets.Where(mb => mb.methodType == MethodType.Service))
 			{
-				List<string> stateMethodsTemp = stateMethods.Keys.ToList();
-				List<string> serviceMethodsTemp = serviceMethods.Keys.ToList();
-				List<string> canExitMethodsTemp = canExitMethods.Keys.ToList();
-				//先找到新的没有生成的method
-				foreach (var state in previousStateMethodsName)
+				mb.linePosition = builder.ToString().Split("\n").Length + 1;
+				builder.Append(mb.MethodCode);
+				builder.AppendLine();
+			}
+			builder.Append("\t//State Methods\n");
+			foreach (var mb in targets.Where(mb => mb.methodType == MethodType.State))
+			{
+				mb.linePosition = builder.ToString().Split("\n").Length + 1;
+				builder.Append(mb.MethodCode);
+				var canExit = targets.Find(ce => ce.methodType == MethodType.CanExit && ce.targetName == mb.targetName);
+				if (canExit != null)
 				{
-					if (stateMethods.ContainsKey(state))
-					{
-						stateMethods.Remove(state);
-					}
+					builder.Append(canExit.MethodCode);
 				}
-				foreach (var service in previousServiceMethodsName)
+				builder.AppendLine();
+			}
+			builder.Append(afterMethod);
+			byteArray = Encoding.UTF8.GetBytes(builder.ToString());
+			FileStream fileStream;
+			fileStream = File.Create(filePath + realScriptControllerName+"_Default" + ".cs");
+			fileStream.Write(byteArray, 0, byteArray.Length);
+			fileStream.Close();
+
+		}
+		/// <summary>
+		/// 生成需要独立生的方法代码脚本
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <param name="iMethodBlock"></param>
+		public void GenerateIndependentMethodScript(string filePath,MethodBlock iMethodBlock)
+		{
+			//TODO:针对于StateMachine中的Service来说,应该生成到同一个脚本文件中。
+			StringBuilder builder = new StringBuilder();
+			byte[] byteArray;
+			builder.Append(
+					"using RPGCore.AI.HFSM;\n" +
+					"using UnityEngine;\n" +
+					$"public partial class {realScriptControllerName} : StateMachineScriptController\n" +
+					"{\n"+
+					"//Don't delete or modify the #region & #endregion\n" +
+					"#region Method\n");
+			string suffix = "";
+			if (iMethodBlock.methodType == MethodType.Service)
+			{
+				builder.Append(iMethodBlock.MethodCode);
+				builder.AppendLine();
+				suffix = $"_{iMethodBlock.targetName.Split("/")[0]}";
+				foreach (var mb in methodBlocks.Where(m =>m.methodType == MethodType.Service && m.targetName != iMethodBlock.targetName && m.targetName.Split("/")[0] == iMethodBlock.targetName.Split("/")[0]))
 				{
-					if (serviceMethods.ContainsKey(service))
-					{
-						serviceMethods.Remove(service);
-					}
+					builder.Append(mb.MethodCode);
+					builder.AppendLine();
+					mb.independentGenerate = false;
 				}
-				foreach (var canExit in previousCanExitMethodsName)
+			}
+			else if (iMethodBlock.methodType == MethodType.State) 
+			{
+				builder.Append(iMethodBlock.MethodCode);
+				var canExit = methodBlocks.Find(ce => ce.methodType == MethodType.CanExit && ce.targetName == iMethodBlock.targetName);
+				if (canExit != null)
 				{
-					if (canExitMethods.ContainsKey(canExit))
-					{
-						canExitMethods.Remove(canExit);
-					}
+					builder.Append(canExit.MethodCode);
 				}
-				//记录当前有哪些method
-				previousStateMethodsName.Clear();
-				previousServiceMethodsName.Clear();
-				previousCanExitMethodsName.Clear();
-				previousServiceMethodsName = serviceMethodsTemp;
-				previousStateMethodsName = stateMethodsTemp;
-				previousCanExitMethodsName = canExitMethodsTemp;
-				if (serviceMethods.Count != 0 || stateMethods.Count != 0 || canExitMethods.Count != 0)
+				builder.AppendLine();
+				suffix = $"_{iMethodBlock.targetName}";
+			}
+			builder.Append("#endregion Method\n" + "}\n");
+			byteArray = Encoding.UTF8.GetBytes(builder.ToString());
+			FileStream fileStream;
+			fileStream = File.Create(filePath + realScriptControllerName + suffix + ".cs");
+			fileStream.Write(byteArray, 0, byteArray.Length);
+			fileStream.Close();
+		}
+		/// <summary>
+		/// 更新在指定脚本文件中的方法的方法体
+		/// </summary>
+		private void UpdateMethodBlocksInfo(string path,bool updateHeadAndTailBlock = false)
+		{
+			FileStream fileStream;
+			StringBuilder methodsCode = new StringBuilder();
+			//如果脚本存在 则进行修改
+			if (File.Exists(path))
+			{
+				//读取现有代码
+				fileStream = File.OpenRead(path);
+				byte[] buffer = new byte[1024];
+				int bytesRead = fileStream.Read(buffer, 0, buffer.Length);
+				while (bytesRead > 0)
 				{
-					List<string> newConstructString = new List<string>();
-					string[] lines = constructString.ToString().Split("\n").Where(str => str != "").ToArray();
-					int methodBegin = lines.ToList().FindIndex(str => str.Contains("#region Method")) + 1;
-					int methodEnd = lines.ToList().FindIndex(str => str.Contains("#endregion Method"));
-					bool hasNewState = stateMethods.Count != 0;
-					bool hasNewService = serviceMethods.Count != 0;
-					bool hasNewCanExit = canExitMethods.Count != 0;
-					bool finishUpdate = false;
-					for (int i = 0; i < methodBegin; i++)
+					methodsCode.Append(Encoding.Default.GetString(buffer, 0, bytesRead));
+					bytesRead = fileStream.Read(buffer, 0, buffer.Length);
+				}
+				fileStream.Close();
+
+				List<string> lines = methodsCode.ToString().Split("\n").ToList();
+				int methodBegin = lines.FindIndex(str => str.Contains("#region Method"));
+				int methodEnd = lines.FindIndex(str => str.Contains("#endregion Method"));
+				int leftBraceCount = 1, rightBraceCount = 0;
+				string line = "";
+				for (int i = methodBegin + 1; i <= methodEnd - 1; i++)
+				{
+					line = lines[i];
+					if (Regex.IsMatch(line, "\\[.*\\(.*\\)\\]"))
 					{
-						newConstructString.Add(lines[i]);
-					}
-					for (int i = methodBegin; i < methodEnd; i++)
-					{
-						string line = lines[i];
-						if (line.Contains("private") && !finishUpdate)
+						//找到对应的MethodBlock并更新方法体
+						int first = line.IndexOf("\"", 0, line.Length);
+						int second = line.IndexOf("\"", first + 1, line.Length - first - 1);
+						string name = line.Substring(first + 1, second - first - 1);
+						MethodBlock block = methodBlocks.Find(mb => name == mb.targetName && mb.methodType.ToString() == line.Replace("\t", "").Substring(1, mb.methodType.ToString().Length));
+						if (block != null)
 						{
-							if (line.Contains("StateExecuteType") && hasNewState)
+							//跳过第一个‘{’
+							while (!lines[i].Contains("{")) i++;
+							StringBuilder builder = new StringBuilder();
+							//拿到方法体
+							while (true)
 							{
-								string des = newConstructString.Last();
-								newConstructString.RemoveAt(newConstructString.FindLastIndex(str => str == des));
-								foreach (var state in stateMethods)
+								i++;
+								if (lines[i].Contains("{"))
 								{
-									string[] codes = GetStateMethodCode(state.Key, state.Value);
-									foreach (var item in codes)
-									{
-										newConstructString.Add(item);
-									}
+									++leftBraceCount;
 								}
-								newConstructString.Add(des);
-								hasNewState = false;
-							}
-							else if (line.Contains("ServiceExecuteType") && hasNewService)
-							{
-								string des = newConstructString.Last();
-								newConstructString.RemoveAt(newConstructString.FindLastIndex(str => str == des));
-								foreach (var service in serviceMethods)
+								if (lines[i].Contains("}"))
 								{
-									string[] codes = GetStateMachineServiceMethodCode(service.Key, service.Value);
-									foreach (var item in codes)
-									{
-										newConstructString.Add(item);
-									}
+									++rightBraceCount;
 								}
-								newConstructString.Add(des);
-								hasNewService = false;
+								if (leftBraceCount == rightBraceCount) break;
+								builder.Append(lines[i] + "\n");
 							}
-							else if (line.Contains("bool") && hasNewCanExit)
-							{
-								string des = newConstructString.Last();
-								newConstructString.RemoveAt(newConstructString.FindLastIndex(str => str == des));
-								foreach (var canExit in canExitMethods)
-								{
-									string[] codes = GetCanExitMethodCode(canExit.Key, canExit.Value);
-									foreach (var item in codes)
-									{
-										newConstructString.Add(item);
-									}
-								}
-								newConstructString.Add(des);
-								hasNewCanExit = false;
-							}
-							finishUpdate = !hasNewService && !hasNewState && !hasNewCanExit;
-							newConstructString.Add(line);
+							//更新methodblock中的方法体
+							block.methodBodyLines = builder.ToString();
+							leftBraceCount = 1;
+							rightBraceCount = 0;
 						}
-						else
-						{
-							newConstructString.Add(line);
-						}
-					}
-					for (int i = methodEnd; i < lines.Length; i++)
-					{
-						newConstructString.Add(lines[i]);
-					}
-					constructString.Clear();
-					foreach (string str in newConstructString)
-					{
-						constructString.Append(str + '\n');
 					}
 				}
+				if (updateHeadAndTailBlock) 
+				{
+					beforeMethod = "";
+					afterMethod = "";
+					for (int i = 0; i <= methodBegin; i++) { beforeMethod += lines[i] + "\n"; }
+					for (int i = methodEnd; i < lines.Count; i++) { afterMethod += lines[i] + "\n"; }
+				}
+				Save();
 			}
 		}
 
@@ -456,7 +571,7 @@ namespace RPGCore.AI.HFSM
 		/// <summary>
 		///创建一个State
 		/// </summary>
-		public void CreateState(Rect rect, StateMachineData currentStateMachine)
+		public StateData CreateState(Rect rect, StateMachineData currentStateMachine)
 		{
 			int count = states.Count(s => s.id.Contains("New State"));
 			StateData state = new StateData()
@@ -473,12 +588,13 @@ namespace RPGCore.AI.HFSM
 				currentStateMachine.defaultState = state.id;
 			}
 			Save();
+			return state;
 		}
 
 		/// <summary>
 		///创建一个StateMachine
 		/// </summary>
-		public void CreateStateMachine(Rect rect, StateMachineData currentStateMachine)
+		public StateMachineData CreateStateMachine(Rect rect, StateMachineData currentStateMachine)
 		{
 			int count = stateMachines.Count(s => s.id.Contains("New StateMachine"));
 			StateMachineData stateMachine = new StateMachineData()
@@ -490,7 +606,9 @@ namespace RPGCore.AI.HFSM
 			};
 			stateMachines.Add(stateMachine);
 			currentStateMachine.childStates.Add(stateMachine.id);
+			CreateState(new Rect(600, 400, StateBase.stateWidth, StateBase.stateHeight), stateMachine);
 			Save();
+			return stateMachine;
 		}
 
 		/// <summary>
@@ -667,18 +785,53 @@ namespace RPGCore.AI.HFSM
 		/// <summary>
 		/// 重命名一个State或StateMachine
 		/// </summary>
-		public void RenameState(StateBaseData state, string newName)
+		public void RenameState(StateBaseData state, string @new, bool description = false, bool canExit = false)
 		{
-			if (string.IsNullOrEmpty(newName)) return;
+			if (state.stateType == StateType.State)
+			{
+				if (canExit)
+				{
+					var m = methodBlocks.Find(mb => mb.methodType == MethodType.CanExit && mb.targetName == state.id);
+					if (m != null)
+					{
+						m.targetDescription = @new;
+						m.Update();
+					}
+					(state as StateData).canExitDescription = @new;
+					Save();
+					return;
+				}
+				else if (description)
+				{
+					var m = methodBlocks.Find(mb => mb.methodType == MethodType.State && mb.targetName == state.id);
+					if (m != null)
+					{
+						m.targetDescription = @new;
+						m.Update();
+					}
+					state.description = @new;
+					Save();
+					return;
+				}
+				else
+				{
+					if (string.IsNullOrEmpty(@new)) return;
+					foreach (var mb in methodBlocks.Where(mb => mb.methodType != MethodType.Service && mb.targetName == state.id))
+					{
+						mb.targetName = @new;
+						mb.Update();
+					}
+				}
+			}
 			foreach (var sm in stateMachines)
 			{
 				int index = sm.childStates.FindIndex(s => s == state.id);
 				if (index != -1)
 				{
-					sm.childStates[index] = newName;
+					sm.childStates[index] = @new;
 					if (state.isDefault)
 					{
-						sm.defaultState = newName;
+						sm.defaultState = @new;
 					}
 					break;
 				}
@@ -687,48 +840,130 @@ namespace RPGCore.AI.HFSM
 			{
 				if (t.to == state.id)
 				{
-					t.to = newName;
+					t.to = @new;
 				}
 				else if (t.from == state.id)
 				{
-					t.from = newName;
+					t.from = @new;
 				}
 			}
-			state.id = newName;
+			state.id = @new;
 			Save();
 		}
 
+		/// <summary>
+		/// 重命名一个Service
+		/// </summary>
+		public void RenameService(ServiceData serviceData, string newName)
+		{
+			if (string.IsNullOrEmpty(newName)) return;
+			foreach (var mb in methodBlocks.Where(mb => mb.methodType == MethodType.Service))
+			{
+				mb.targetName = newName;
+				mb.Update();
+			}
+			serviceData.id = newName;
+		}
+
+		/// <summary>
+		/// 跳转到对应的脚本文件
+		/// </summary>
+		public void JumpToScript(StateBaseData item) 
+		{
+			MethodBlock mb = methodBlocks.Find(
+				m=>m.methodType != MethodType.CanExit 
+				&& (item.stateType == StateType.State ? m.targetName : m.targetName.Split("/")[0]) == item.id
+			);
+			if (mb != null)
+			{
+				string filePath = controllerConfig.CustomFilePath? controllerConfig.FilePath + "/" : scriptableObjectAssetPath;
+				if (controllerConfig.DisperseGenerate && (item.independentGenerate || controllerConfig.DisperseAll))
+				{ 
+					filePath += realScriptControllerName + $"_{item.id}.cs";
+				}
+				else
+				{
+					filePath += realScriptControllerName + "_Default.cs";
+				}
+				Debug.Log(filePath);
+				if (!AssetDatabase.OpenAsset(AssetDatabase.LoadAssetAtPath<TextAsset>(filePath), mb.linePosition)) 
+				{
+					Debug.Log("Jump failure.");
+				}
+			}
+			else 
+			{
+				Debug.Log("Perhaps no corresponding code is currently generated, please generate the code and try again.");
+			}
+		}
 #endif
+	}
 
-		private string[] GetStateMethodCode(string stateMethodName, string description)
+	public enum MethodType
+	{
+		State,
+		Service,
+		CanExit
+	}
+
+	/// <summary>
+	/// 记录一个State或Service或CanExit方法代码块
+	/// </summary>
+	[System.Serializable]
+	public class MethodBlock
+	{
+		public MethodType methodType;
+		public string targetName;
+		public string targetDescription;
+		public string methodAttributeLine = "";
+		public string methodHeadLine = "";
+		public string methodBodyLines = "";
+		public int linePosition = 0;
+		public bool independentGenerate = false;
+		public bool isDeleted = false;
+
+		public string MethodCode
 		{
-			string[] result = new string[4];
-			result[0] = $"	//description:{description}";
-			result[1] = $"	private void {stateMethodName}(State state, StateExecuteType type)";
-			result[2] = "	{";
-			result[3] = "	}";
-			return result;
+			get
+			{
+				if (methodType == MethodType.CanExit)
+				{
+					if (methodBodyLines == "") methodBodyLines = "\t\treturn false;\n";
+				}
+				return
+					methodAttributeLine +
+					methodHeadLine +
+					"\t{\n" +
+					methodBodyLines +
+					"\t}\n";
+			}
 		}
 
-		private string[] GetStateMachineServiceMethodCode(string serviceMethodName, string description)
+		public MethodBlock(MethodType methodType, string id, string description, bool independentGenerate = false)
 		{
-			string[] result = new string[4];
-			result[0] = $"	//description:{description}";
-			result[1] = $"	private void {serviceMethodName}(Service service, ServiceExecuteType type)";
-			result[2] = "	{";
-			result[3] = "	}";
-			return result;
+			this.methodType = methodType;
+			this.targetName = id;
+			this.targetDescription = description;
+			Update();
+			this.independentGenerate = independentGenerate;
 		}
 
-		private string[] GetCanExitMethodCode(string stateName, string description)
+		/// <summary>
+		/// 更新方法代码
+		/// </summary>
+		public void Update()
 		{
-			string[] result = new string[5];
-			result[0] = $"	//description:{description}";
-			result[1] = $"	private bool {stateName}(State state)";
-			result[2] = "	{";
-			result[3] = "		return true;";
-			result[4] = "	}";
-			return result;
+			string attribute = "";
+			if (methodType == MethodType.State) attribute = "State";
+			else if (methodType == MethodType.Service) attribute = "Service";
+			else attribute = "CanExit";
+			if (targetDescription == "") methodAttributeLine = $"[{attribute}(\"{targetName}\")]\n";
+			else methodAttributeLine = $"[{attribute}(\"{targetName}\",\"{targetDescription}\")]\n";
+			if (methodType == MethodType.State) methodHeadLine = $"private void on_{targetName.Replace(" ", "")}_execute(State state, StateExecuteType type)\n";
+			else if (methodType == MethodType.Service) methodHeadLine = $"private void on_{targetName.Split("/")[1].Replace(" ", "")}_service(Service service, ServiceExecuteType type)\n";
+			else methodHeadLine = $"private bool can_{targetName.Replace(" ", "")}_exit(State state)\n";
+			methodAttributeLine = "\t" + methodAttributeLine;
+			methodHeadLine = "\t" + methodHeadLine;
 		}
 	}
 }

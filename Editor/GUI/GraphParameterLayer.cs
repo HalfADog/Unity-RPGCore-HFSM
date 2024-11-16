@@ -1,5 +1,6 @@
 using DogFramework.EditorExtension;
 using System;
+using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -39,7 +40,7 @@ namespace RPGCore.AI.HFSM
 			}
 			if (Application.isPlaying && this.context.executor != null)
 			{
-				reorderableList.list = this.context.executor.scriptController.parameters;
+				reorderableList.list = this.context.executor.scriptController.parameters.Values.ToList();
 			}
 			else
 			{
@@ -75,7 +76,7 @@ namespace RPGCore.AI.HFSM
 			Parameter parameterData = null;
 			if (Application.isPlaying)
 			{
-				parameterData = context.executor.scriptController.parameters[index];
+				parameterData = context.executor.scriptController.parameters.Values.ToList()[index];
 			}
 			else
 			{
@@ -144,7 +145,6 @@ namespace RPGCore.AI.HFSM
 		/// <param name="list"></param>
 		private void AddParamter(ReorderableList list)
 		{
-			//TODO
 			GenericMenu genericMenu = new GenericMenu();
 
 			for (int i = 0; i < Enum.GetNames(typeof(ParameterType)).Length; i++)

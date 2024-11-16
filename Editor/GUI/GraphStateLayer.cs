@@ -181,6 +181,12 @@ namespace RPGCore.AI.HFSM
 				{
 					SetDefaultState(item);
 				});
+				genericMenu.AddSeparator(string.Empty);
+				genericMenu.AddItem(new GUIContent("Edit Script"), false, () =>
+				{
+					//TODO:打开文件并跳转到对应行
+					context.HFSMController.JumpToScript(item);
+				});
 			}
 			genericMenu.ShowAsContext();
 		}
@@ -205,6 +211,7 @@ namespace RPGCore.AI.HFSM
 				context.HFSMController.DeleteState(context.currentStateMachine, item);
 				context.HFSMController.DeleteTransition(context.currentStateMachine, item);
 			}
+			context.selectedStates.Clear();
 			context.UpdateCurrentChildStatesData();
 			context.UpdateCurrentTransitionData();
 		}

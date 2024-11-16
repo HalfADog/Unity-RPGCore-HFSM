@@ -21,7 +21,7 @@ namespace RPGCore.AI.HFSM
 		/// <summary>
 		/// 此运行时Controller所拥有的Parameters
 		/// </summary>
-		public List<Parameter> parameters = new List<Parameter>();
+		public Dictionary<string,Parameter> parameters = new Dictionary<string, Parameter>();
 
 		/// <summary>
 		///调用此方法构造运行时的状态机
@@ -49,14 +49,14 @@ namespace RPGCore.AI.HFSM
 			foreach (Parameter parameter in parameters)
 			{
 				Parameter param = new Parameter(parameter.name, parameter.type, parameter.baseValue);
-				this.parameters.Add(param);
+				this.parameters[parameter.name] = param;
 			}
 			return parameters;
 		}
 
 		public void SetInteger(string id, int value)
 		{
-			Parameter data = parameters.Find(param => param.type == ParameterType.Int && param.name == id);
+			Parameter data = parameters[id];
 			if (data != null)
 			{
 				data.baseValue = value;
@@ -65,7 +65,7 @@ namespace RPGCore.AI.HFSM
 
 		public void SetFloat(string id, float value)
 		{
-			Parameter data = parameters.Find(param => param.type == ParameterType.Float && param.name == id);
+			Parameter data = parameters[id];
 			if (data != null)
 			{
 				data.baseValue = value;
@@ -74,7 +74,7 @@ namespace RPGCore.AI.HFSM
 
 		public void SetBool(string id, bool value)
 		{
-			Parameter data = parameters.Find(param => param.type == ParameterType.Bool && param.name == id);
+			Parameter data = parameters[id];
 			if (data != null)
 			{
 				data.baseValue = value ? 1.0f : 0.0f;
@@ -83,7 +83,7 @@ namespace RPGCore.AI.HFSM
 
 		public void SetTrigger(string id)
 		{
-			Parameter data = parameters.Find(param => param.type == ParameterType.Trigger && param.name == id);
+			Parameter data = parameters[id];
 			if (data != null)
 			{
 				data.baseValue = 1.0f;
@@ -91,16 +91,16 @@ namespace RPGCore.AI.HFSM
 		}
 
 		public int GetInteger(string id) =>
-			 Mathf.RoundToInt((parameters.Find(param => param.type == ParameterType.Int && param.name == id))?.baseValue ?? int.MinValue);
+			 Mathf.RoundToInt((parameters[id])?.baseValue ?? int.MinValue);
 
 		public float GetFloat(string id) =>
-			 parameters.Find(param => param.type == ParameterType.Float && param.name == id)?.baseValue ?? float.MinValue;
+			 parameters[id]?.baseValue ?? float.MinValue;
 
 		public bool GetBool(string id) =>
-			 (parameters.Find(param => param.type == ParameterType.Bool && param.name == id)?.baseValue ?? 0.0f) >= 1.0f;
+			 (parameters[id]?.baseValue ?? 0.0f) >= 1.0f;
 
 		public bool GetTrigger(string id) =>
-			 (parameters.Find(param => param.type == ParameterType.Trigger && param.name == id)?.baseValue ?? 0.0f) >= 1.0f;
+			 (parameters[id]?.baseValue ?? 0.0f) >= 1.0f;
 
 		public void PauseService(string serviceName)
 		{

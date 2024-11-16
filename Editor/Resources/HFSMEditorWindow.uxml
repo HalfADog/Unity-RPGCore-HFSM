@@ -5,7 +5,10 @@
                 <ui:IMGUIContainer name="ParametersIMGUI" style="flex-grow: 1; overflow: hidden;" />
             </ui:VisualElement>
             <ui:VisualElement name="State" style="flex-shrink: 1; min-width: 256px;">
-                <ui:IMGUIContainer name="StateLayerIMGUI" style="height: 20px; flex-grow: 0; border-bottom-width: 1px; border-bottom-color: rgb(84, 84, 84);" />
+                <ui:VisualElement name="HeadContainer" style="height: 20px; flex-direction: row; flex-grow: 0;">
+                    <ui:IMGUIContainer name="StateLayerIMGUI" style="height: 20px; flex-grow: 0; border-bottom-width: 1px; border-bottom-color: rgb(84, 84, 84); width: 100%; white-space: nowrap;" />
+                    <uie:ToolbarButton text="Generate" display-tooltip-when-elided="true" name="GenerateButton" style="width: auto; align-items: center; justify-content: center; -unity-text-align: middle-center; white-space: nowrap; min-width: 64px; max-width: 64px;" />
+                </ui:VisualElement>
                 <ui:IMGUIContainer name="StateGraphIMGUI" style="flex-grow: 1; overflow: hidden;" />
             </ui:VisualElement>
         </TwoPaneSplitViewHorizontalExposed>

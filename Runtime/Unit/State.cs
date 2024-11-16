@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace RPGCore.AI.HFSM
 {
@@ -117,7 +118,6 @@ namespace RPGCore.AI.HFSM
 		public bool isTemporary = false;
 		public bool canExitHandle = false;
 		public string canExitDescription;
-
 		public StateData()
 		{
 			stateType = StateType.State;

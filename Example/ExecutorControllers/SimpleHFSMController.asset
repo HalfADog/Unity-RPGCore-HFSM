@@ -52,6 +52,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: idle
     stateType: 0
     isDefault: 1
@@ -66,6 +67,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: walk
     stateType: 0
     isDefault: 0
@@ -80,6 +82,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: run
     stateType: 0
     isDefault: 0
@@ -94,6 +97,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: GetHit
     stateType: 0
     isDefault: 0
@@ -108,6 +112,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: Attack
     stateType: 0
     isDefault: 1
@@ -122,6 +127,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: Roll
     stateType: 0
     isDefault: 0
@@ -136,6 +142,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: Skill
     stateType: 0
     isDefault: 0
@@ -150,6 +157,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: Pause
     stateType: 0
     isDefault: 0
@@ -165,6 +173,7 @@ MonoBehaviour:
       width: 0
       height: 0
     isExecuting: 0
+    independentGenerate: 0
     id: Root
     stateType: 1
     isDefault: 0
@@ -195,6 +204,7 @@ MonoBehaviour:
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Any
       stateType: 0
       isDefault: 0
@@ -210,6 +220,7 @@ MonoBehaviour:
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Entry
       stateType: 0
       isDefault: 0
@@ -224,6 +235,7 @@ MonoBehaviour:
       width: 480
       height: 90
     isExecuting: 0
+    independentGenerate: 0
     id: SMTest
     stateType: 1
     isDefault: 0
@@ -251,6 +263,7 @@ MonoBehaviour:
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Any
       stateType: 0
       isDefault: 0
@@ -266,6 +279,7 @@ MonoBehaviour:
         width: 480
         height: 90
       isExecuting: 0
+      independentGenerate: 0
       id: Entry
       stateType: 0
       isDefault: 0
@@ -354,17 +368,160 @@ MonoBehaviour:
     - parameterName: Pause
       compareType: 2
       compareValue: 1
-  previousStateMethodsName:
-  - on_idle_execute
-  - on_walk_execute
-  - on_run_execute
-  - on_GetHit_execute
-  - on_Attack_execute
-  - on_Roll_execute
-  - on_Skill_execute
-  - on_Pause_execute
-  previousServiceMethodsName:
-  - on_SMService_service
-  previousCanExitMethodsName:
-  - can_GetHit_exit
-  - can_Pause_exit
+  methodBlocks:
+  - methodType: 1
+    targetName: SMTest/SMService
+    targetDescription: 
+    methodAttributeLine: "\t[Service(\"SMTest/SMService\")]\n"
+    methodHeadLine: "\tprivate void on_SMService_service(Service service, ServiceExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == ServiceExecuteType.Service) Debug.Log(\"SMService
+      Execute\");\n"
+    linePosition: 15
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: idle
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"idle\")]\n"
+    methodHeadLine: "\tprivate void on_idle_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimationPlayer.RequestTransition(\"Idle\");\r\n\t\t\tDebug.Log(\"Idle
+      Execute.\");\r\n\t\t}\r\n\t\telse if (type == StateExecuteType.OnLogic)\r\n\t\t{\r\n\t\t\tif
+      (animationPlayer.CurrentFinishPlaying)\r\n\t\t\t{\r\n\t\t\t\tSetBool(\"IsIdle\",
+      false);\r\n\t\t\t\tSetBool(\"IsRun\", false);\r\n\t\t\t\tSetBool(\"IsWalk\",
+      true);\r\n\t\t\t}\r\n\t\t}\n"
+    linePosition: 22
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: walk
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"walk\")]\n"
+    methodHeadLine: "\tprivate void on_walk_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimationPlayer.RequestTransition(\"Walk\");\r\n\t\t\tDebug.Log(\"Walk
+      Execute.\");\r\n\t\t}\r\n\t\telse if (type == StateExecuteType.OnLogic)\r\n\t\t{\r\n\t\t\tif
+      (animationPlayer.CurrentFinishPlaying)\r\n\t\t\t{\r\n\t\t\t\tSetBool(\"IsIdle\",
+      false);\r\n\t\t\t\tSetBool(\"IsWalk\", false);\r\n\t\t\t\tSetBool(\"IsRun\",
+      true);\r\n\t\t\t}\r\n\t\t}\n"
+    linePosition: 41
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: run
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"run\")]\n"
+    methodHeadLine: "\tprivate void on_run_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimationPlayer.RequestTransition(\"Run\");\r\n\t\t\tDebug.Log(\"Run
+      Execute.\");\r\n\t\t}\r\n\t\telse if (type == StateExecuteType.OnLogic)\r\n\t\t{\r\n\t\t\tif
+      (animationPlayer.CurrentFinishPlaying)\r\n\t\t\t{\r\n\t\t\t\tSetBool(\"IsRun\",
+      false);\r\n\t\t\t\tSetBool(\"IsWalk\", false);\r\n\t\t\t\tSetBool(\"IsIdle\",
+      true);\r\n\t\t\t}\r\n\t\t}\n"
+    linePosition: 60
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: GetHit
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"GetHit\")]\n"
+    methodHeadLine: "\tprivate void on_GetHit_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter) animationPlayer.RequestTransition(\"GetHit\");\n"
+    linePosition: 79
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: Attack
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"Attack\")]\n"
+    methodHeadLine: "\tprivate void on_Attack_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimationPlayer.RequestTransition(\"Attack\");\r\n\t\t\tDebug.Log(\"Attack
+      Execute.\");\r\n\t\t}\r\n\t\telse if (type == StateExecuteType.OnLogic)\r\n\t\t{\r\n\t\t\tif
+      (animationPlayer.CurrentFinishPlaying)\r\n\t\t\t{\r\n\t\t\t\tSetBool(\"IsAttack\",
+      false);\r\n\t\t\t\tSetBool(\"IsRoll\", true);\r\n\t\t\t\tSetBool(\"IsSkill\",
+      false);\r\n\t\t\t}\r\n\t\t}\n"
+    linePosition: 90
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: Roll
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"Roll\")]\n"
+    methodHeadLine: "\tprivate void on_Roll_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimationPlayer.RequestTransition(\"Roll\");\r\n\t\t\tDebug.Log(\"Roll
+      Execute.\");\r\n\t\t}\r\n\t\telse if (type == StateExecuteType.OnLogic)\r\n\t\t{\r\n\t\t\tif
+      (animationPlayer.CurrentFinishPlaying)\r\n\t\t\t{\r\n\t\t\t\tSetBool(\"IsAttack\",
+      false);\r\n\t\t\t\tSetBool(\"IsRoll\", false);\r\n\t\t\t\tSetBool(\"IsSkill\",
+      true);\r\n\t\t\t}\r\n\t\t}\n"
+    linePosition: 109
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: Skill
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"Skill\")]\n"
+    methodHeadLine: "\tprivate void on_Skill_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tanimationPlayer.RequestTransition(\"Skill\");\r\n\t\t\tDebug.Log(\"Skill
+      Execute.\");\r\n\t\t}\r\n\t\telse if (type == StateExecuteType.OnLogic)\r\n\t\t{\r\n\t\t\tif
+      (animationPlayer.CurrentFinishPlaying)\r\n\t\t\t{\r\n\t\t\t\tSetBool(\"IsAttack\",
+      true);\r\n\t\t\t\tSetBool(\"IsRoll\", false);\r\n\t\t\t\tSetBool(\"IsSkill\",
+      false);\r\n\t\t\t}\r\n\t\t}\n"
+    linePosition: 128
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 0
+    targetName: Pause
+    targetDescription: 
+    methodAttributeLine: "\t[State(\"Pause\")]\n"
+    methodHeadLine: "\tprivate void on_Pause_execute(State state, StateExecuteType
+      type)\n"
+    methodBodyLines: "\t\tif (type == StateExecuteType.OnEnter)\r\n\t\t{\r\n\t\t\tDebug.Log(\"Pause\");\r\n\t\t\tanimationPlayer.Stop();\r\n\t\t}\r\n\t\telse
+      if (type == StateExecuteType.OnExit)\r\n\t\t{\r\n\t\t\tanimationPlayer.Play();\r\n\t\t}\n"
+    linePosition: 147
+    independentGenerate: 1
+    isDeleted: 0
+  - methodType: 2
+    targetName: GetHit
+    targetDescription: 
+    methodAttributeLine: "\t[CanExit(\"GetHit\")]\n"
+    methodHeadLine: "\tprivate bool can_GetHit_exit(State state)\n"
+    methodBodyLines: "\t\treturn animationPlayer.CurrentFinishPlaying;\n"
+    linePosition: 0
+    independentGenerate: 0
+    isDeleted: 0
+  - methodType: 2
+    targetName: Pause
+    targetDescription: 
+    methodAttributeLine: "\t[CanExit(\"Pause\")]\n"
+    methodHeadLine: "\tprivate bool can_Pause_exit(State state)\n"
+    methodBodyLines: "\t\treturn !GetBool(\"Pause\");\n"
+    linePosition: 0
+    independentGenerate: 0
+    isDeleted: 0
+  beforeMethod: "using RPGCore.AI.HFSM;\nusing RPGCore.Animation;\nusing UnityEngine;\npublic
+    partial class SimpleHFSMController : StateMachineScriptController\n{\n\tprivate
+    AnimationPlayerManager animationPlayer;\n\tpublic override void Init()\n\t{\n\t\tanimationPlayer
+    = gameObject.GetComponent<AnimationPlayerManager>();\n\t}\n//Don't delete or
+    modify the #region & #endregion\n#region Method\n"
+  afterMethod: '#endregion Method
+
+    }
+
+
+
+
+'
+  isGenerated: 1
+  controllerConfig:
+    CustomFilePath: 0
+    FilePath: 
+    UseNamespace: 0
+    Namespace: 
+    DisperseGenerate: 1
+    DisperseAll: 1
+  generateFilePath: D:/UnityProject/LearnProject_U6/Assets/Plugins/Unity-RPGCore-HFSM/Example/ExecutorControllers/

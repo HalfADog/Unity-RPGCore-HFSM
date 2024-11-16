@@ -79,6 +79,9 @@ namespace RPGCore.AI.HFSM
 		[HideInInspector]
 		public bool isExecuting;
 
+		//是否独立生成脚本
+		[HideInInspector]
+		public bool independentGenerate;
 #endif
 		public string id;
 		public StateType stateType;

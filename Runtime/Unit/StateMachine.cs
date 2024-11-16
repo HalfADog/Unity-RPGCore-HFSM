@@ -152,13 +152,13 @@ namespace RPGCore.AI.HFSM
 			{
 				id = StateMachine.anyState,
 				stateType = StateType.State,
-				position = new Rect(100, 300, StateBase.stateWidth, StateBase.stateHeight)
+				position = new Rect(0, 100, StateBase.stateWidth, StateBase.stateHeight)
 			};
 			entry = new StateData()
 			{
 				id = StateMachine.entryState,
 				stateType = StateType.State,
-				position = new Rect(100, 400, StateBase.stateWidth, StateBase.stateHeight)
+				position = new Rect(0, 400, StateBase.stateWidth, StateBase.stateHeight)
 			};
 			stateType = StateType.StateMachine;
 		}

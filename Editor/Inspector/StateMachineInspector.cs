@@ -67,6 +67,15 @@ namespace RPGCore.AI.HFSM
 				helper.stateMachineData.description = description;
 			}
 			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.Space();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUI.BeginDisabledGroup(!helper.HFSMController.controllerConfig.DisperseGenerate || helper.HFSMController.controllerConfig.DisperseAll);
+			EditorGUILayout.LabelField(new GUIContent("independent", "Generate script files independently"), GUILayout.Width(80));
+			helper.stateMachineData.independentGenerate = GUILayout.Toggle(helper.stateMachineData.independentGenerate, "", GUILayout.Width(20));
+			EditorGUI.EndDisabledGroup();
+			EditorGUILayout.EndHorizontal();
+
 			EditorGUILayout.EndVertical();
 			EditorGUI.EndDisabledGroup();
 		}
@@ -79,9 +88,9 @@ namespace RPGCore.AI.HFSM
 			EditorGUILayout.BeginHorizontal();
 
 			GUILayout.Label(EditorGUIUtility.IconContent("icons/processed/unityeditor/animations/animatorstate icon.asset"), GUILayout.Width(30), GUILayout.Height(30));
-			EditorGUILayout.LabelField("Name", GUILayout.Width(80));
+			EditorGUILayout.LabelField("Name", style: "HeaderLabel", GUILayout.Width(50));
 
-			EditorGUILayout.LabelField(stateName);
+			EditorGUILayout.LabelField(helper.stateMachineData.id);
 
 			EditorGUILayout.EndHorizontal();
 
@@ -112,8 +121,7 @@ namespace RPGCore.AI.HFSM
 				tempname = EditorGUI.DelayedTextField(left_container, service.id);
 				if (EditorGUI.EndChangeCheck())
 				{
-					//this.context.HFSMController.RenameParameter(parameterData, tempname);
-					service.id = tempname;
+					helper.HFSMController.RenameService(service, tempname);
 					isRenaming = false;
 				}
 			}

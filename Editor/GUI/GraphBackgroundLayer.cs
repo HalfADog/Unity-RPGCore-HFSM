@@ -69,10 +69,12 @@ namespace RPGCore.AI.HFSM
 			genericMenu.AddItem(new GUIContent("Create State"), false, () =>
 			{
 				CreateState();
+				
 			});
 			genericMenu.AddItem(new GUIContent("Create StateMachine"), false, () =>
 			{
 				CreateStateMachine();
+				
 			});
 			genericMenu.ShowAsContext();
 		}
@@ -81,16 +83,22 @@ namespace RPGCore.AI.HFSM
 		{
 			var rect = new Rect(0, 0, stateWidth, stateHeight);
 			rect.center = MousePosition(mousePosition);
-			context.HFSMController.CreateState(rect, context.currentStateMachine);
+			StateBaseData newState = context.HFSMController.CreateState(rect, context.currentStateMachine);
 			context.UpdateCurrentChildStatesData();
+			context.ClearAllSelectNode();
+			context.selectedStates.Add(newState);
+			StateInspectorHelper.instance.Inspector(context.HFSMController, newState as StateData);
 		}
 
 		private void CreateStateMachine()
 		{
 			var rect = new Rect(0, 0, stateWidth, stateHeight);
 			rect.center = MousePosition(mousePosition);
-			context.HFSMController.CreateStateMachine(rect, context.currentStateMachine);
+			StateBaseData newState = context.HFSMController.CreateStateMachine(rect, context.currentStateMachine);
 			context.UpdateCurrentChildStatesData();
+			context.ClearAllSelectNode();
+			context.selectedStates.Add(newState);
+			StateMachineInspectorHelper.instance.Inspector(context.HFSMController, newState as StateMachineData);
 		}
 
 		private void DrawGrid(Rect rect, float gridSpace, Color color)
