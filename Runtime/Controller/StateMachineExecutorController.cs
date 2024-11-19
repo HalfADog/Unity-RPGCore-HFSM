@@ -11,7 +11,7 @@ using UnityEngine;
 namespace RPGCore.AI.HFSM
 {
 	/// <summary>
-	/// ×´Ì¬»úController;²»ÓÃ×öÔËĞĞÊ±
+	/// çŠ¶æ€æœºController;ä¸ç”¨åšè¿è¡Œæ—¶
 	/// </summary>
 	[CreateAssetMenu(fileName = "FSM Executor Controller", menuName = "State Machine/Executor Controller", order = 4)]
 	public class StateMachineExecutorController : ScriptableObject
@@ -19,13 +19,13 @@ namespace RPGCore.AI.HFSM
 		[HideInInspector]
 		public string realScriptControllerName;
 
-		//controllerÖĞµÄparameter
+		//controllerä¸­çš„parameter
 		public List<Parameter> parameters = new List<Parameter>();
 
-		//controllerÖĞµÄstate
+		//controllerä¸­çš„state
 		public List<StateData> states = new List<StateData>();
 
-		//controllerÖĞµÄStateMachine
+		//controllerä¸­çš„StateMachine
 		public List<StateMachineData> stateMachines = new List<StateMachineData>()
 		{
 			new StateMachineData()
@@ -36,27 +36,27 @@ namespace RPGCore.AI.HFSM
 			}
 		};
 
-		//controllerÖĞµÄTransition
+		//controllerä¸­çš„Transition
 		public List<TransitionData> transitions = new List<TransitionData>();
 
 		private string scriptableObjectAssetPath;
 
-		//¼ÇÂ¼µ±Ç°ÓĞÄÄĞ©·½·¨ĞèÒª¹¹Ôì
+		//è®°å½•å½“å‰æœ‰å“ªäº›æ–¹æ³•éœ€è¦æ„é€ 
 		private Dictionary<string, string> stateMethods = new Dictionary<string, string>();
 		private Dictionary<string, string> serviceMethods = new Dictionary<string, string>();
 		private Dictionary<string, string> canExitMethods = new Dictionary<string, string>();
 
-		//¼ÇÂ¼ËùÓĞ·½·¨µÄĞÅÏ¢°üÀ¨´úÂë
+		//è®°å½•æ‰€æœ‰æ–¹æ³•çš„ä¿¡æ¯åŒ…æ‹¬ä»£ç 
 		public List<MethodBlock> methodBlocks = new List<MethodBlock>();
 		public string beforeMethod;
 		public string afterMethod;
 		public bool isGenerated;
-		//ÅäÖÃÎÄ¼şSO
+		//é…ç½®æ–‡ä»¶SO
 		public StateMachineControllerConfig controllerConfig = new StateMachineControllerConfig();
-		//ÎÄ¼şÉú³ÉÎ»ÖÃ
+		//æ–‡ä»¶ç”Ÿæˆä½ç½®
 		public string generateFilePath = "";
 		/// <summary>
-		/// ¸ù¾İ´Ë»ñÈ¡ÔËĞĞÊ±Controller
+		/// æ ¹æ®æ­¤è·å–è¿è¡Œæ—¶Controller
 		/// </summary>
 		public StateMachineScriptController GetController()
 		{
@@ -81,7 +81,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// ¸ù¾İÔËĞĞÊ±ControllerÉú³É²¢³õÊ¼»¯×´Ì¬»ú
+		/// æ ¹æ®è¿è¡Œæ—¶Controllerç”Ÿæˆå¹¶åˆå§‹åŒ–çŠ¶æ€æœº
 		/// </summary>
 		public StateMachine GetExecuteStateMachine(StateMachineExecutor executor, out StateMachineScriptController scriptController)
 		{
@@ -96,9 +96,9 @@ namespace RPGCore.AI.HFSM
 			}
 			return null;
 		}
-
+#if UNITY_EDITOR
 		/// <summary>
-		/// ¸ù¾İ´ËController´æ´¢µÄĞÅÏ¢Éú³ÉÊµ¼ÊµÄÔËĞĞÊ±Controller
+		/// æ ¹æ®æ­¤Controllerå­˜å‚¨çš„ä¿¡æ¯ç”Ÿæˆå®é™…çš„è¿è¡Œæ—¶Controller
 		/// </summary>
 		public void GenerateScriptController()
 		{
@@ -122,7 +122,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// Éú³É¹¹Ôì²ã×´Ì¬»úµÄ´úÂë½Å±¾
+		/// ç”Ÿæˆæ„é€ å±‚çŠ¶æ€æœºçš„ä»£ç è„šæœ¬
 		/// </summary>
 		private void GenerateConstructScript(string filePath)
 		{
@@ -153,7 +153,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// ×Ô¶¥ÏòÏÂÉú³É¹¹Ôì×´Ì¬»ú´úÂë£»
+		/// è‡ªé¡¶å‘ä¸‹ç”Ÿæˆæ„é€ çŠ¶æ€æœºä»£ç ï¼›
 		/// </summary>
 		private void GenerateConstructCode(StateMachineData stateMachineData, StringBuilder constructString, int level)
 		{
@@ -162,7 +162,7 @@ namespace RPGCore.AI.HFSM
 			allStates.AddRange(stateMachines);
 			string interval = "";
 			for (int i = 0; i < level; i++) { interval += "\t"; }
-			//ÏÈÉú³Éservice
+			//å…ˆç”Ÿæˆservice
 			for (int i = 0; i < stateMachineData.services.Count; i++)
 			{
 				ServiceData service = stateMachineData.services[i];
@@ -170,7 +170,7 @@ namespace RPGCore.AI.HFSM
 					+ $".OnService(on_{service.id.Replace(" ","")}_service)");
 				serviceMethods[stateMachineData.id+"/"+service.id] = $"{service.description}";
 			}
-			//ÔÙÌí¼ÓËùÓĞµÄstateÓëStateMachine
+			//å†æ·»åŠ æ‰€æœ‰çš„stateä¸StateMachine
 			for (int i = 0; i < stateMachineData.childStates.Count; i++)
 			{
 				StateBaseData state = allStates.Find(s => s.id == stateMachineData.childStates[i]);
@@ -197,7 +197,7 @@ namespace RPGCore.AI.HFSM
 					stateMethods[state.id] = $"{state.description}";
 				}
 			}
-			//×îºó´¦ÀíËùÓĞµÄTransition
+			//æœ€åå¤„ç†æ‰€æœ‰çš„Transition
 			for (int i = 0; i < stateMachineData.transitions.Count; i++)
 			{
 				TransitionData transition = transitions.Find(t => t.id == stateMachineData.transitions[i]);
@@ -243,14 +243,14 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// Éú³É·½·¨´úÂëÎÄ¼ş
+		/// ç”Ÿæˆæ–¹æ³•ä»£ç æ–‡ä»¶
 		/// </summary>
 		public void GenerateMethodScripts(string filePath)
 		{
-			//Èç¹ûµ±Ç°Controller´´½¨ºóÃ»ÓĞÉú³É¹ı½Å±¾ÎÄ¼ş
+			//å¦‚æœå½“å‰Controlleråˆ›å»ºåæ²¡æœ‰ç”Ÿæˆè¿‡è„šæœ¬æ–‡ä»¶
 			if (!isGenerated)
 			{
-				//ÏÈ½«ControllerÖĞµÄÄÚÈİ×ª»¯ÎªMethodBlocksÖĞµÄÊı¾İ
+				//å…ˆå°†Controllerä¸­çš„å†…å®¹è½¬åŒ–ä¸ºMethodBlocksä¸­çš„æ•°æ®
 				foreach (var service in serviceMethods)
 				{
 					MethodBlock block = new MethodBlock(MethodType.Service, service.Key, service.Value);
@@ -283,7 +283,7 @@ namespace RPGCore.AI.HFSM
 					//block.independentGenerate = states.Find(s => s.id == block.targetName)?.independentGenerate ?? false;
 					methodBlocks.Add(block);
 				}
-				//ºó¸ù¾İMethodBlocksÖĞµÄĞÅÏ¢Éú³É½Å±¾ÎÄ¼ş
+				//åæ ¹æ®MethodBlocksä¸­çš„ä¿¡æ¯ç”Ÿæˆè„šæœ¬æ–‡ä»¶
 				beforeMethod =
 					"using RPGCore.AI.HFSM;\n" +
 					"using UnityEngine;\n" +
@@ -304,10 +304,10 @@ namespace RPGCore.AI.HFSM
 				}
 				isGenerated = true;
 			}
-			//Èç¹ûÉú³É¹ı¾Í¸ù¾İControllerÖĞµÄÄÚÈİ¸üĞÂMethodBlocksÖĞµÄĞÅÏ¢
+			//å¦‚æœç”Ÿæˆè¿‡å°±æ ¹æ®Controllerä¸­çš„å†…å®¹æ›´æ–°MethodBlocksä¸­çš„ä¿¡æ¯
 			else 
 			{
-				//ÏÈ¸ù¾İ½Å±¾ÎÄ¼ş¸üĞÂmethodblockÖĞµÄÄÚÈİ
+				//å…ˆæ ¹æ®è„šæœ¬æ–‡ä»¶æ›´æ–°methodblockä¸­çš„å†…å®¹
 				UpdateMethodBlocksInfo(filePath+realScriptControllerName + "_Default.cs",true);
 				foreach (var mb in methodBlocks.Where(mb=>mb.independentGenerate))
 				{
@@ -315,7 +315,7 @@ namespace RPGCore.AI.HFSM
 					if (mb.methodType == MethodType.Service) suffix = $"_{mb.targetName.Split("/")[1]}";
 					UpdateMethodBlocksInfo(filePath + realScriptControllerName + suffix + ".cs");
 				}
-				//È»ºó°ÑÒÑ¾­É¾³ıµÄControllerÖĞ¶ÔÓ¦µÄMethodBlockµÄÄÚÈİÉ¾³ı
+				//ç„¶åæŠŠå·²ç»åˆ é™¤çš„Controllerä¸­å¯¹åº”çš„MethodBlockçš„å†…å®¹åˆ é™¤
 				methodBlocks.ForEach(mb => mb.isDeleted = true);
 				foreach (var service in serviceMethods)
 				{
@@ -390,7 +390,7 @@ namespace RPGCore.AI.HFSM
 					else m.isDeleted = false;
 				}
 				methodBlocks.RemoveAll(mb => mb.isDeleted);
-				//×îºóÉú³É½Å±¾ÎÄ¼ş
+				//æœ€åç”Ÿæˆè„šæœ¬æ–‡ä»¶
 				GenerateDefaultMethodsScript(filePath, methodBlocks.Where(mb => !mb.independentGenerate).ToList());
 				foreach (var mb in methodBlocks.Where(mb => mb.independentGenerate))
 				{
@@ -401,7 +401,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// Éú³É·Ç¶ÀÁ¢Éú³ÉµÄ·½·¨´úÂë½Å±¾
+		/// ç”Ÿæˆéç‹¬ç«‹ç”Ÿæˆçš„æ–¹æ³•ä»£ç è„šæœ¬
 		/// </summary>
 		public void GenerateDefaultMethodsScript(string filePath,List<MethodBlock> targets) 
 		{
@@ -436,13 +436,13 @@ namespace RPGCore.AI.HFSM
 
 		}
 		/// <summary>
-		/// Éú³ÉĞèÒª¶ÀÁ¢ÉúµÄ·½·¨´úÂë½Å±¾
+		/// ç”Ÿæˆéœ€è¦ç‹¬ç«‹ç”Ÿçš„æ–¹æ³•ä»£ç è„šæœ¬
 		/// </summary>
 		/// <param name="filePath"></param>
 		/// <param name="iMethodBlock"></param>
 		public void GenerateIndependentMethodScript(string filePath,MethodBlock iMethodBlock)
 		{
-			//TODO:Õë¶ÔÓÚStateMachineÖĞµÄServiceÀ´Ëµ,Ó¦¸ÃÉú³Éµ½Í¬Ò»¸ö½Å±¾ÎÄ¼şÖĞ¡£
+			//TODO:é’ˆå¯¹äºStateMachineä¸­çš„Serviceæ¥è¯´,åº”è¯¥ç”Ÿæˆåˆ°åŒä¸€ä¸ªè„šæœ¬æ–‡ä»¶ä¸­ã€‚
 			StringBuilder builder = new StringBuilder();
 			byte[] byteArray;
 			builder.Append(
@@ -484,16 +484,16 @@ namespace RPGCore.AI.HFSM
 			fileStream.Close();
 		}
 		/// <summary>
-		/// ¸üĞÂÔÚÖ¸¶¨½Å±¾ÎÄ¼şÖĞµÄ·½·¨µÄ·½·¨Ìå
+		/// æ›´æ–°åœ¨æŒ‡å®šè„šæœ¬æ–‡ä»¶ä¸­çš„æ–¹æ³•çš„æ–¹æ³•ä½“
 		/// </summary>
 		private void UpdateMethodBlocksInfo(string path,bool updateHeadAndTailBlock = false)
 		{
 			FileStream fileStream;
 			StringBuilder methodsCode = new StringBuilder();
-			//Èç¹û½Å±¾´æÔÚ Ôò½øĞĞĞŞ¸Ä
+			//å¦‚æœè„šæœ¬å­˜åœ¨ åˆ™è¿›è¡Œä¿®æ”¹
 			if (File.Exists(path))
 			{
-				//¶ÁÈ¡ÏÖÓĞ´úÂë
+				//è¯»å–ç°æœ‰ä»£ç 
 				fileStream = File.OpenRead(path);
 				byte[] buffer = new byte[1024];
 				int bytesRead = fileStream.Read(buffer, 0, buffer.Length);
@@ -514,17 +514,17 @@ namespace RPGCore.AI.HFSM
 					line = lines[i];
 					if (Regex.IsMatch(line, "\\[.*\\(.*\\)\\]"))
 					{
-						//ÕÒµ½¶ÔÓ¦µÄMethodBlock²¢¸üĞÂ·½·¨Ìå
+						//æ‰¾åˆ°å¯¹åº”çš„MethodBlockå¹¶æ›´æ–°æ–¹æ³•ä½“
 						int first = line.IndexOf("\"", 0, line.Length);
 						int second = line.IndexOf("\"", first + 1, line.Length - first - 1);
 						string name = line.Substring(first + 1, second - first - 1);
 						MethodBlock block = methodBlocks.Find(mb => name == mb.targetName && mb.methodType.ToString() == line.Replace("\t", "").Substring(1, mb.methodType.ToString().Length));
 						if (block != null)
 						{
-							//Ìø¹ıµÚÒ»¸ö¡®{¡¯
+							//è·³è¿‡ç¬¬ä¸€ä¸ªâ€˜{â€™
 							while (!lines[i].Contains("{")) i++;
 							StringBuilder builder = new StringBuilder();
-							//ÄÃµ½·½·¨Ìå
+							//æ‹¿åˆ°æ–¹æ³•ä½“
 							while (true)
 							{
 								i++;
@@ -539,7 +539,7 @@ namespace RPGCore.AI.HFSM
 								if (leftBraceCount == rightBraceCount) break;
 								builder.Append(lines[i] + "\n");
 							}
-							//¸üĞÂmethodblockÖĞµÄ·½·¨Ìå
+							//æ›´æ–°methodblockä¸­çš„æ–¹æ³•ä½“
 							block.methodBodyLines = builder.ToString();
 							leftBraceCount = 1;
 							rightBraceCount = 0;
@@ -557,10 +557,8 @@ namespace RPGCore.AI.HFSM
 			}
 		}
 
-#if UNITY_EDITOR
-
 		/// <summary>
-		/// ±£´æĞŞ¸Ä
+		/// ä¿å­˜ä¿®æ”¹
 		/// </summary>
 		public void Save()
 		{
@@ -569,7 +567,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		///´´½¨Ò»¸öState
+		///åˆ›å»ºä¸€ä¸ªState
 		/// </summary>
 		public StateData CreateState(Rect rect, StateMachineData currentStateMachine)
 		{
@@ -592,7 +590,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		///´´½¨Ò»¸öStateMachine
+		///åˆ›å»ºä¸€ä¸ªStateMachine
 		/// </summary>
 		public StateMachineData CreateStateMachine(Rect rect, StateMachineData currentStateMachine)
 		{
@@ -612,7 +610,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		///´´½¨Ò»¸öTransition
+		///åˆ›å»ºä¸€ä¸ªTransition
 		/// </summary>
 		public void CreateTransition(StateMachineData stateMachine, StateBaseData from, StateBaseData to)
 		{
@@ -634,7 +632,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		///´´½¨Ò»¸öParameter
+		///åˆ›å»ºä¸€ä¸ªParameter
 		/// </summary>
 		public void CreateParamter(ParameterType parameterType)
 		{
@@ -646,7 +644,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		///´´½¨Ò»¸öTransitionµÄParamterCondition
+		///åˆ›å»ºä¸€ä¸ªTransitionçš„ParamterCondition
 		/// </summary>
 		public void CreateParamterCondition(TransitionData transition)
 		{
@@ -663,7 +661,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		///´´½¨Ò»¸öStateMachineµÄService
+		///åˆ›å»ºä¸€ä¸ªStateMachineçš„Service
 		/// </summary>
 		public void CreateService(StateMachineData stateMachine, ServiceType serviceType)
 		{
@@ -676,7 +674,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// É¾³ıState»òStateMachine
+		/// åˆ é™¤Stateæˆ–StateMachine
 		/// </summary>
 		public void DeleteState(StateMachineData stateMachine, StateBaseData state)
 		{
@@ -708,7 +706,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// É¾³ıTransition
+		/// åˆ é™¤Transition
 		/// </summary>
 		public void DeleteTransition(StateMachineData stateMachine, TransitionData transition)
 		{
@@ -718,7 +716,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// É¾³ıState»òStateMachineÊ±Í¬²½É¾³ıÓë´ËÁ´½ÓµÄTransition
+		/// åˆ é™¤Stateæˆ–StateMachineæ—¶åŒæ­¥åˆ é™¤ä¸æ­¤é“¾æ¥çš„Transition
 		/// </summary>
 		public void DeleteTransition(StateMachineData stateMachine, StateBaseData state)
 		{
@@ -729,7 +727,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// É¾³ıÒ»¸öParameter
+		/// åˆ é™¤ä¸€ä¸ªParameter
 		/// </summary>
 		public void DeleteParameter(int index)
 		{
@@ -744,7 +742,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// É¾³ıÒ»¸öTransitionÖĞµÄParameterCondition
+		/// åˆ é™¤ä¸€ä¸ªTransitionä¸­çš„ParameterCondition
 		/// </summary>
 		public void DeleteParameterCondition(TransitionData transition, int index)
 		{
@@ -753,7 +751,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// É¾³ıÒ»¸öStateMachineÖĞµÄService
+		/// åˆ é™¤ä¸€ä¸ªStateMachineä¸­çš„Service
 		/// </summary>
 		public void DeleteService(StateMachineData stateMachine, ServiceData service)
 		{
@@ -762,7 +760,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// ÖØÃüÃûÒ»¸öParameter
+		/// é‡å‘½åä¸€ä¸ªParameter
 		/// </summary>
 		public void RenameParameter(Parameter parameter, string newName)
 		{
@@ -783,7 +781,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// ÖØÃüÃûÒ»¸öState»òStateMachine
+		/// é‡å‘½åä¸€ä¸ªStateæˆ–StateMachine
 		/// </summary>
 		public void RenameState(StateBaseData state, string @new, bool description = false, bool canExit = false)
 		{
@@ -852,7 +850,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// ÖØÃüÃûÒ»¸öService
+		/// é‡å‘½åä¸€ä¸ªService
 		/// </summary>
 		public void RenameService(ServiceData serviceData, string newName)
 		{
@@ -866,7 +864,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// Ìø×ªµ½¶ÔÓ¦µÄ½Å±¾ÎÄ¼ş
+		/// è·³è½¬åˆ°å¯¹åº”çš„è„šæœ¬æ–‡ä»¶
 		/// </summary>
 		public void JumpToScript(StateBaseData item) 
 		{
@@ -907,7 +905,7 @@ namespace RPGCore.AI.HFSM
 	}
 
 	/// <summary>
-	/// ¼ÇÂ¼Ò»¸öState»òService»òCanExit·½·¨´úÂë¿é
+	/// è®°å½•ä¸€ä¸ªStateæˆ–Serviceæˆ–CanExitæ–¹æ³•ä»£ç å—
 	/// </summary>
 	[System.Serializable]
 	public class MethodBlock
@@ -949,7 +947,7 @@ namespace RPGCore.AI.HFSM
 		}
 
 		/// <summary>
-		/// ¸üĞÂ·½·¨´úÂë
+		/// æ›´æ–°æ–¹æ³•ä»£ç 
 		/// </summary>
 		public void Update()
 		{

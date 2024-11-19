@@ -148,6 +148,7 @@ namespace RPGCore.AI.HFSM
 
 		public StateMachineData()
 		{
+#if UNITY_EDITOR
 			any = new StateData()
 			{
 				id = StateMachine.anyState,
@@ -161,6 +162,7 @@ namespace RPGCore.AI.HFSM
 				position = new Rect(0, 400, StateBase.stateWidth, StateBase.stateHeight)
 			};
 			stateType = StateType.StateMachine;
+#endif
 		}
 	}
 }
